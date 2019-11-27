@@ -30,5 +30,18 @@ peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under a given source dir
 mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
-
-
+# reading time series audio data re-sampled at 7KHz for a given audio portion specified with offset and duration
+# parameters
+audio_data = AudioManager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=10.0)
+# computing spectrogram
+spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+# extracting spectral peaks
+spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+# generate fingerprints
+audio_fingerprints = list()
+audio_fingerprints_info = list()
+fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
+                                            audio_fingerprints=audio_fingerprints,
+                                            audio_fingerprints_info=audio_fingerprints_info)
+# generated fingerprints
+print(audio_fingerprints)
