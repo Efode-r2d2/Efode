@@ -56,7 +56,12 @@ class FingerprintGenerator(object):
                 self.geometric_hashing(spectral_peaks[i], valid_triplets, audio_fingerprints=audio_fingerprints,
                                        audio_fingerprints_info=audio_fingerprints_info, min_frame=min_frame, max_frame=max_frame)
 
-    def generate_valid_triplets(self, anchor, combs, valid_triplets, fixed=False, no_groups=2):
+    def generate_valid_triplets(self,
+                                anchor,
+                                combs,
+                                valid_triplets,
+                                fixed=False,
+                                no_groups=2):
         """
 
         :param anchor: 
@@ -86,7 +91,13 @@ class FingerprintGenerator(object):
                 else:
                     valid_triplets.append(i)
 
-    def geometric_hashing(self, anchor, valid_triplets, audio_fingerprints, audio_fingerprints_info, min_frame, max_frame):
+    def geometric_hashing(self,
+                          anchor,
+                          valid_triplets,
+                          audio_fingerprints,
+                          audio_fingerprints_info,
+                          min_frame,
+                          max_frame):
         """
 
         :param anchor:
