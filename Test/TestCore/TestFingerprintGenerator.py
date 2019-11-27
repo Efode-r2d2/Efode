@@ -15,3 +15,20 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from Core import Spectrogram
+from Core import PeakExtractor
+from Core import FingerprintGenerator
+from Utilities import AudioManager
+from Utilities import DirManager
+from Utilities import GraphManager
+
+# source directory
+src_dir = "../../../Test_Data/Reference_Audios"
+# spectrogram, peak extractor, fingerprint generator objects
+stft = Spectrogram(hop_length=32)
+peak_extractor = PeakExtractor()
+fingerprint_generator = FingerprintGenerator()
+# searching for all .mp3 files under a given source dir
+mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+
+
