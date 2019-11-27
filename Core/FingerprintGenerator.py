@@ -87,6 +87,15 @@ class FingerprintGenerator(object):
                     valid_triplets.append(i)
 
     def geometric_hashing(self, anchor, valid_triplets, audio_fingerprints, audio_fingerprints_info, min_frame, max_frame):
+        """
+
+        :param anchor:
+        :param valid_triplets:
+        :param audio_fingerprints:
+        :param audio_fingerprints_info:
+        :param min_frame:
+        :param max_frame:
+        """
         for i in valid_triplets:
             a = anchor
             b = i[1]
