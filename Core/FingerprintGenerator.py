@@ -1,5 +1,5 @@
 """
-    < This program reproduced a work published in https://www.ee.columbia.edu/~dpwe/papers/Wang03-shazam.pdf>
+    < Efode is an an open source audio fingerprinting system>
     Copyright (C) <2019>  <Efriem Desalew Gebie>
 
     This program is free software: you can redistribute it and/or modify
