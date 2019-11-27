@@ -15,3 +15,47 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import shelve
+
+
+def get_shelf_file_index(shelf_path):
+    """
+
+    :param shelf_path:
+    :return:
+    """
+    return shelve.open(shelf_path)
+
+
+def insert_data(shelf, key, value):
+    """
+
+    :param shelf:
+    :param key:
+    :param value:
+    """
+    shelf[str(key)] = value
+
+
+def insert_bulk_data(shelf, audio_id, hash_info):
+    """
+
+    :param shelf:
+    :param audio_id:
+    :param hash_info:
+    """
+    count = 0
+    for i in hash_info:
+        key = audio_id + "_" + count
+        insert_data(key, i)
+        count += 1
+
+
+def get_data(shelf, key):
+    """
+
+    :param shelf:
+    :param key:
+    :return:
+    """
+    return shelf[str(key)]
