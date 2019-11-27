@@ -45,3 +45,4 @@ fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                             audio_fingerprints_info=audio_fingerprints_info)
 # generated fingerprints
 print(audio_fingerprints)
+print(audio_fingerprints_info)
