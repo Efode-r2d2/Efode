@@ -47,7 +47,7 @@ def insert_bulk_data(shelf, audio_id, hash_info):
     count = 0
     for i in hash_info:
         key = audio_id + "_" + count
-        insert_data(key, i)
+        insert_data(shelf=shelf, key=key, value=i)
         count += 1
 
 
