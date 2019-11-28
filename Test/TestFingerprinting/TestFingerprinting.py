@@ -24,3 +24,16 @@ from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
 from RawDataManager import RawDataManager
 from ConfigManager import ConfigManager
+
+# source dir
+src_dir = "../../../Test_Data/Reference_Audios"
+# r_tree path
+r_tree_path = "../../../Hashes/Efode/R_Tree"
+# raw_data_path
+raw_data_path = "../../../Raw_Data/Efode/Raw_Data"
+# spectrogram, peak  extractor and fingerprint generator objects
+stft = Spectrogram(hop_length=32)
+peak_extractor = PeakExtractor()
+fingerprint_generator = FingerprintGenerator()
+# searching for all .mp3 files under specified source dir
+mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
