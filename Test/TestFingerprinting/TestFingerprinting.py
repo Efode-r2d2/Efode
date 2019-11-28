@@ -15,3 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from Utilities import AudioManager
+from Utilities import GraphManager
+from Utilities import DirManager
+from Core import Spectrogram
+from Core import PeakExtractor
+from Core import FingerprintGenerator
+from RTreeManager import RTreeManager
+from RawDataManager import RawDataManager
+from ConfigManager import ConfigManager
