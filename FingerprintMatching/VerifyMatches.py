@@ -15,3 +15,27 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import numpy as np
+
+
+def verify_matches(matches_in_bins):
+    """
+
+    :param matches_in_bins:
+    :return:
+    """
+    candidate_audios = list()
+    final_audios = list()
+    for i in matches_in_bins:
+        if len(matches_in_bins[i]) >= 10:
+            candidate_audios.append(i)
+    for y in candidate_audios:
+        n, b = np.histogram(matches_in_bins[y], bins=len(matches_in_bins[y]))
+        final_audios.append((y, n.max(), list(n).index(n.max())))
+    if len(final_audios) > 0:
+        final_audios = sorted(final_audios, key=lambda x: int(x[1]), reverse=True)
+        if final_audios[0][1] >= 5:
+            return final_audios[0][0], final_audios[0][1]
+        return "No Match", final_audios[0][1]
+    else:
+        return "No Match", 0

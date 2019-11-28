@@ -21,6 +21,15 @@ import numpy as np
 
 
 def match_fingerprints(rtree_index, raw_data_manager, audio_fingerprints, audio_fingerprints_info, tolerance=0.31):
+    """
+
+    :param rtree_index:
+    :param raw_data_manager:
+    :param audio_fingerprints:
+    :param audio_fingerprints_info:
+    :param tolerance:
+    :return:
+    """
     count = 0
     matches_in_bins = defaultdict(list)
     for i in audio_fingerprints:
