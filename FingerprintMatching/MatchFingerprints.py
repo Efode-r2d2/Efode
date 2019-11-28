@@ -17,14 +17,15 @@
 """
 from collections import defaultdict
 from RTreeManager import RTreeManager
+from RawDataManager import RawDataManager
 import numpy as np
 
 
-def match_fingerprints(rtree_index, raw_data_manager, audio_fingerprints, audio_fingerprints_info, tolerance=0.31):
+def match_fingerprints(rtree_index, raw_data_index, audio_fingerprints, audio_fingerprints_info, tolerance=0.31):
     """
 
     :param rtree_index:
-    :param raw_data_manager:
+    :param raw_data_index:
     :param audio_fingerprints:
     :param audio_fingerprints_info:
     :param tolerance:
@@ -40,7 +41,7 @@ def match_fingerprints(rtree_index, raw_data_manager, audio_fingerprints, audio_
         by_q = audio_fingerprints_info[count][3]
         candidate_matches = RTreeManager.get_nearest_node(rtree_index, i)
         for m in candidate_matches:
-            raw_data = raw_data_manager.get_data(m)
+            raw_data = RawDataManager.get_data(shelf=raw_data_index, key=m)
             ax_r = raw_data[1]
             ay_r = raw_data[2]
             bx_r = raw_data[3]

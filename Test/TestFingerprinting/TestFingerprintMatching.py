@@ -16,67 +16,54 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from Utilities import AudioManager
-from Utilities import GraphManager
 from Utilities import DirManager
 from Core import Spectrogram
 from Core import PeakExtractor
 from Core import FingerprintGenerator
+from FingerprintMatching import MatchFingerprints
+from FingerprintMatching import VerifyMatches
 from RTreeManager import RTreeManager
 from RawDataManager import RawDataManager
-from ConfigManager import ConfigManager
 
 # source dir
-src_dir = "../../../Test_Data/Reference_Audios"
+src_dir = "../../../Test_Data/Modified_Audios/White_Noise"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree"
-# raw_data_path
+# raw data path
 raw_data_path = "../../../Raw_Data/Efode/Raw_Data"
-# config file path
-config_file_path = "../../Config/Config.ini"
-# spectrogram, peak  extractor and fingerprint generator objects
+# spectrogram, peak extractor and fingerprint generator objects
 stft = Spectrogram(hop_length=32)
 peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
-# searching for all .mp3 files under specified source dir
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
-# get r_tree_index
+# searching for all .wav files under specified source dir
+wav_files = DirManager.find_wav_files(src_dir=src_dir)
+# r_tree index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
-# shelf index
-shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
-# fingerprinting files
-for i in mp3_files[0:5]:
-    # audio fingerprints
+# raw data index
+raw_data_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
+for i in wav_files:
     audio_fingerprints = list()
     audio_fingerprints_info = list()
-    # extracting audio id
-    audio_id = i.split("/")[5].split(".")[0]
     # reading time series audio data re-sampled at 7KHz
     audio_data = AudioManager.load_audio(audio_path=i)
-    # computing spectrogram of the audio
+    # computing spectrogram
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks
     spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
-    # generate fingerprints
+    # generating fingerprints
     fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                                 audio_fingerprints=audio_fingerprints,
                                                 audio_fingerprints_info=audio_fingerprints_info,
-                                                r=1.0,
+                                                r=1,
                                                 c=4,
                                                 fixed=False,
-                                                no_groups=2)
-    raw_index = int(ConfigManager.read_config(config_file_path=config_file_path,
-                                              section="Default", sub_section="Raw_Index"))
-    fingerprint_index = 0
-    for j in audio_fingerprints:
-        iter = 1
-        row = [audio_id] + audio_fingerprints_info[fingerprint_index]
-        RTreeManager.insert_node(rtree_index=r_tree_index, node_id=raw_index, geo_hash=j)
-        RawDataManager.insert_data(shelf=shelf_index, key=raw_index, value=row)
-        raw_index += 1
-        fingerprint_index += 1
-    ConfigManager.write_config(config_file_path=config_file_path,
-                               section="Default",
-                               sub_section="Raw_Index",
-                               value=str(raw_index))
-    print("Done With Fingerprinting ", iter)
-    iter += 1
+                                                no_groups=100,
+                                                tolerance=0.2)
+    matches_in_bins=MatchFingerprints.match_fingerprints(rtree_index=r_tree_index,
+                                                         raw_data_index=raw_data_index,
+                                                         audio_fingerprints=audio_fingerprints,
+                                                         audio_fingerprints_info=audio_fingerprints_info,
+                                                         tolerance=0.2)
+    match = VerifyMatches.verify_matches(matches_in_bins=matches_in_bins)
+    print(match)
+
