@@ -59,11 +59,13 @@ for i in wav_files:
                                                 fixed=False,
                                                 no_groups=100,
                                                 tolerance=0.2)
+    # matching fingerprints
     matches_in_bins=MatchFingerprints.match_fingerprints(rtree_index=r_tree_index,
                                                          raw_data_index=raw_data_index,
                                                          audio_fingerprints=audio_fingerprints,
                                                          audio_fingerprints_info=audio_fingerprints_info,
                                                          tolerance=0.2)
+    # verifying matches
     match = VerifyMatches.verify_matches(matches_in_bins=matches_in_bins)
     print(match)
 
