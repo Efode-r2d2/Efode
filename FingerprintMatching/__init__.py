@@ -1,2 +1,3 @@
 from FingerprintMatching import MatchFingerprints
 from FingerprintMatching import VerifyMatches
+from FingerprintMatching.Match import Match

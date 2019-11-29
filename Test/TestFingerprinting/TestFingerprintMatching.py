@@ -26,7 +26,7 @@ from RTreeManager import RTreeManager
 from RawDataManager import RawDataManager
 
 # source dir
-src_dir = "../../../Test_Data/Modified_Audios/White_Noise"
+src_dir = "../../../Test_Data/Modified_Audios/Speed_Change/70"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree"
 # raw data path
@@ -45,7 +45,7 @@ for i in wav_files:
     audio_fingerprints = list()
     audio_fingerprints_info = list()
     # reading time series audio data re-sampled at 7KHz
-    audio_data = AudioManager.load_audio(audio_path=i, offset=0.0, duration=5.0)
+    audio_data = AudioManager.load_audio(audio_path=i, offset=0.0, duration=30.0)
     # computing spectrogram
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks
@@ -58,14 +58,15 @@ for i in wav_files:
                                                 c=1,
                                                 fixed=False,
                                                 no_groups=100,
-                                                tolerance=0.2)
+                                                tolerance=0.32)
     print(len(audio_fingerprints))
     # matching fingerprints
     matches_in_bins = MatchFingerprints.match_fingerprints(rtree_index=r_tree_index,
                                                            raw_data_index=raw_data_index,
                                                            audio_fingerprints=audio_fingerprints,
                                                            audio_fingerprints_info=audio_fingerprints_info,
-                                                           tolerance=0.2)
+                                                           tolerance=0.32)
     # verifying matches
     match = VerifyMatches.verify_matches(matches_in_bins=matches_in_bins)
     print(match)
+    print(i)

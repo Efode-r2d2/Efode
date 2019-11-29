@@ -47,4 +47,4 @@ def get_nearest_node(rtree_index, geo_hash):
     :param geo_hash:
     :return:
     """
-    return list(rtree_index.nearest((geo_hash[0], geo_hash[1], geo_hash[0], geo_hash[1]), 100))
+    return list(rtree_index.nearest((geo_hash[0], geo_hash[1], geo_hash[0], geo_hash[1]), 10))
