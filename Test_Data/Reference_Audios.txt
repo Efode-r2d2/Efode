@@ -1,0 +1,201 @@
+No,Artist Name/s,Song Title
+1,Childish Gambino,This Is America
+2,"Drake, Big Freedia, 5thward Weebie",Nice For What
+3,"Ed Sheeran,Justin Bieber",I Don't Care
+4,Teddy Afro,Haile
+5,Mason Ramsey,Famous
+6,Cardi B,I Do (feat. SZA)
+7,Ed Sheeran,Perfect Duet (with Beyoncé)
+8,"Jonas Brothers,Frank Dukes,Ryan Tedder,Louis Bell,Andrew DeRoberts,Homer Steinweiss",Sucker
+9,Ariana Grande,No Tears Left to Cry
+10,"Lil Tecca,Nick Mira,Taz Taylor",Ransom
+11,Tank,When We
+12,Lil Dicky,Freaky Friday (feat. Chris Brown)
+13,"Post Malone,Swae Lee,Louis Bell,Carter Lang",Sunflower
+14,Camila Cabello,Never Be the Same
+15,Imagine Dragons,Whatever It Takes
+16,"Shawn Mendes,Teddy Geiger,Scott Harris,Nate Mercereau,Mark Williams,Raul Cubina,Ray 'August Grant' Jacobs,Ryan Svendsen",If I Can't Have You
+17,"Drake,Rick Ross",Money In The Grave
+18,Post Malone,Rockstar (feat. 21 Savage)
+19,DaBaby,Suge
+20,Migos,Walk It Talk It (feat. Drake)
+21,Bazzi,Mine
+22,Blanco Brown,The Git Up
+23,Panic! At the Disco,"Hey Look Ma, I Made It"
+24,Bebe Rexha,Meant to Be
+25,Blake Shelton,God's Country
+26,Lil Nas X,Panini
+27,Post Malone,Paranoid
+28,Khalid,Better
+29,"Bad Bunny,Tainy",Callaita
+30,"Eric Church,Jay Joyce,Craig Wright,Jeff Hyde,Lee Hendricks,Driver Williams",Some Of It
+31,"The Chainsmokers,Bebe Rexha",Call You Mine
+32,"Lil Nas X,Cardi B",Rodeo
+33,"Taylor Swift,Jack Antonoff",The Archer
+34,Beyoncé,Before I Let Go (Homecoming Live Bonus Track)
+35,Khalid,Talk
+36,Aster Aweke,Ethiopia
+37,Lady Antebellum,What If I Never Get Over You
+38,Meghan Trainor,No Excuses
+39,Jay Rock,King's Dead (feat. Kendrick Lamar & Future) 
+40,Shaed,Trampoline
+41,Dua Lipa,IDGAF
+42,"Taylor Swift,Joel Little,Brendon Urie",ME! (feat. Brendon Urie of Panic! At The Disco)
+43,"Sech,Darell",Otro Trago
+44,XXXTENTACION,Sad!
+45,Kendrick Lamar & SZA,All The Stars
+46,Lizzo,Truth Hurts
+47,Morgan Wallen,Whiskey Glasses
+48,El Chombo,Dame tu cosita
+49,NLE Choppa,Shotta Flow
+50,"Luke Bryan,Jody Stevens,Adam Shoenfeld,David Dorn,Greg Morrow,John Willis,mark hill,Perry Coleman,Rob McNelley",Knockin' Boots
+51,Offset & Metro Boomin,Ric Flair Drip
+52,Post Malone,Stay
+53,Jason Aldean,Rearview Town
+54,Taylor Swift,Delicate
+55,"Lady GaGa,Bradley Cooper",Shallow
+56,YoungBoy Never Broke Again,Overdose
+57,Post Malone,Psycho (feat. Ty Dolla $ign)
+58,Famous Dex,JAPAN
+59,"Meek Mill,Drake",Going Bad (feat. Drake)
+60,"Calvin Harris, Dua Lipa",One Kiss
+61,"Offset,Cardi B",Clout
+62,Migos,Stir Fry
+63,Travis Scott,SICKO MODE
+64,"Justin Moore,Jason Kyle Saetveit,Ilya Toshinskiy,Brent Mason,Derek Wells,Paul Franklin,Jimmie Lee Sloas,Paul DiGiovanni,Evan Hutchings",The Ones That Didn’t Make It Back Home
+65,Post Malone,Spoil My Night (feat. Swae Lee)
+66,Chris Young,Raised on Country
+67,"Florida Georgia Line,Ilya Toshinskiy",Talk You Out Of It
+68,"Chris Brown,Drake",No Guidance
+69,Post Malone,Zack and Codeine
+70,Big Sean,Single Again
+71,Post Malone,Over Now
+72,Shawn Mendes,Youth (feat. Khalid)
+73,Chris Lane,I Don't Know About You
+74,Luke Bryan,Most People Are Good
+75,"Charlie Puth, Kehlani",Done For Me (feat. Kehlani)
+76,"Ellie Goulding,Juice Wrld,Jason Evigan,The Monsters & Strangerz,Gian Stone",Hate Me
+77,"Logic, Marshmello",Everyday
+78,Darius Rucker,For The First Time
+79,"Zedd, Maren Morris & Grey",The Middle
+80,"Y2K,Bbno$",Lalala
+81,"Ed Sheeran,Chance the Rapper,PnB Rock",Cross Me (feat. Chance the Rapper & PnB Rock)
+82,Jordan Davis,Singles You Up
+83,"Ed Sheeran,Travis Scott",Antisocial
+84,YoungBoy Never Broke Again,Outside Today
+85,Bad Wolves,Zombie
+86,David Lee Murphy & Kenny Chesney,Everythings Gonna Be Alright
+87,Justin Timberlake,Say Something (feat. Chris Stapleton)
+88,"Mustard,NAV,Playboi Carti,A Boogie Wit da Hoodie",Baguettes in the Face
+89,Blueface,Daddy feat. Rich The Kid
+90,BlocBoy JB,Look Alive (feat. Drake)
+91,Post Malone,Otherside
+92,Halsey,Alone (feat. Big Sean & Stefflon Don)
+93,"NAV,London on Da Track,Meek Mill",Tap
+94,Eli Young Band,Love Ain't
+95,Jhené Aiko,Sativa (feat. Rae Sremmurd)
+96,"Nicki Minaj,NOVA WAV,Andrew Wansel",MEGATRON
+97,"Ozuna, Romeo Santos",El Farsante (Remix) (By Anvicious)
+98,"Mustard,Roddy Ricch",Ballin’
+99,Post Malone,Blame It On Me
+100,YoungBoy Never Broke Again,Diamond Teeth Samurai
+101,Travis Scott,Watch (feat. Kanye West & Lil Uzi Vert)
+102,"Cardi B, Bad Bunny & J Balvin",I Like It
+103,[muzmo.ru] Ella Mai,Bood Up [muzmo.ru]
+104,Camila Cabello,Havana (feat. Young Thug)
+105,Cardi B,Be Careful
+106,"Marshmello,Bastille,Steve Mac",Happier
+107,Dan + Shay,Speechless
+108,Rich The Kid,Plug Walk
+109,"POLO G,Lil Tjay",Pop Out
+110,"Shawn Mendes, Teddy Geiger, Geoff Warburton, Scott Harris",In My Blood
+111,"Rae Sremmurd, Swae Lee, Slim Jxmmi, Juicy J",Powerglide
+112,"Young Thug,J. Cole,Travis Scott",The London (feat. J. Cole & Travis Scott)
+113,"Lewis Capaldi,Pete Kelleher,Tom Barnes,Phil Cook,Benjamin Kohn",Someone You Loved
+114,"Katy Perry,ZEDD,Daniel James,Gino Barletta,Hayley Warner,Leah Haywood",Never Really Over
+115,The Weeknd,Call Out My Name
+116,"Ariana Grande,Tommy Brown,Charles Anderson,Michael Foster,Victoria Monet,Tayla Parx",7 rings
+117,Maroon 5,Wait
+118,Bruno Mars,Finesse (Remix) [feat. Cardi B]
+119,"Taylor Swift,Joel Little",You Need To Calm Down
+120,Saweetie,My Type
+121,Kane Brown,Heaven
+122,"Halsey,Louis Bell",Without Me
+123,Jason Aldean,You Make It Easy
+124,"Post Malone,Brian Lee,Louis Bell,Young Thug",Goodbyes
+125,Cardi B,Drip (feat. Migos)
+126,Post Malone,Rich & Sad
+127,Rick Ross,Gold Roses (feat. Drake)
+128,Post Malone,Ball For Me (feat. Nicki Minaj)
+129,"Sam Smith,Ilya Salmanzadeh",How Do You Sleep?
+130,Nicki Minaj,Chun-Li
+131,"Nio Garcia, Casper Magico & Bad Bunny","Te Boté (feat. Darell, Ozuna & Nicky Jam) [Remix]"
+132,"Quality Control,Lil Baby,DaBaby",Baby
+133,"Megan Thee Stallion,DaBaby",Cash Shit (feat. DaBaby)
+134,"Nicky Jam, J Balvin, Nicky Jam & J Balvin",X
+135,Daddy Yankee,Dura
+136,Dan + Shay,All To Myself
+137,"Anuel Aa,Daddy Yankee,Karol G,J Balvin,Ozuna",China
+138,Luke Combs,One Number Away
+139,J. Cole,KOD
+140,Lil Pump,Esskeetit
+141,"Sam Smith,Normani,Mikkel S. Eriksen,Tor Hermansen",Dancing With A Stranger
+142,Luke Combs,Beer Never Broke My Heart
+143,Marshmello & Anne-Marie,Friends
+144,Drake,God's Plan
+145,The Weeknd & Kendrick Lamar,Pray For Me
+146,"Ed Sheeran,Khalid",Beautiful People (feat. Khalid)
+147,Post Malone,Better Now
+148,Dua Lipa,New Rules
+149,Panic! At the Disco,High Hopes
+150,Ava Max,Sweet but Psycho
+151,Post Malone,92 Explorer
+152,"Yk Osiris,Mgeezy",Worth It
+153,Khalid & Normani,Love Lies
+154,"YG,GYLTTRYP,Ali Manzanarez,David Almanza,Jon Z",Go Loko
+155,Dan + Shay,Tequila
+156,"Marshmello,Kane Brown",One Thing Right (feat. Kane Brown)
+157,"DJ Khaled,SZA",Just Us
+158,J. Cole,ATM
+159,"5 Seconds Of Summer,Andrew Watt,Louis Bell,Charlie Puth,Michael Clifford,Luke Hemmings,Calum Hood,Ashton Irwin",Easier
+160,J. Cole,Kevin's Heart
+161,Chance the Rapper,Hot Shower
+162,Luke Combs,Beautiful Crazy
+163,Cardi B,Press
+164,Post Malone,Same Bitches (feat. G-Eazy & YG)
+165,nf,Time
+166,Post Malone,Takin' Shots
+167,Rich The Kid,New Freezer (feat. Kendrick Lamar)
+168,"Tyler, The Creator",EARFQUAKE
+169,The Chainsmokers & Illenium,Takeaway (feat. Lennon Stella)
+170,"Jonas Brothers,Shellback,Nils-Petter Ankarblom,Peter Karlsson,Jimmy Carr,Jason McNab,Kasper Komar,Robert Mollard,Michael Engstrom,Magnus Johansson,Janne Bjerger,Tomas Jonsson,Wojtek Goral,Mia Samuelsson,Peter Noos Johansson,Mattias Bylund",Only Human
+171,Kenny Chesney,Get Along
+172,"Lunay,Daddy Yankee,Bad Bunny",Soltera (Remix)
+173,Morgan Wallen,Up Down feat Florida Georgia Line
+174,Lauv,I Like Me Better
+175,"Lil Nas X,Cardi B",Rodeo
+176,"Jhay Cortez,J. Balvin,Bad Bunny",No Me Conoce (Remix)
+177,Cardi B,Bartier Cardi (feat. 21 Savage)
+178,"Carrie Underwood,David Garcia,Chris McHugh,Jimmie Lee Sloas,Tom Bukovac,Rob McNelley,Ilya Toshinskiy,Dave Cohen,Ivey Childers,Amanda Lufburrow,Jenni Fairbanks,Josh Miller",Southbound
+179,Dierks Bentley,Living
+180,"Khalid, 6lack, Ty Dolla $ign, Khalid feat. Ty Dolla $ign & 6lack",OTW
+181,"Bryce Vine,YG",La La Land (feat. YG)
+182,Foster The People,Sit Next to Me
+183,"Meek Mill,Ella Mai",24/7 (feat. Ella Mai)
+184,Nicki Minaj,Barbie Tingz
+185,Blake Shelton,I Lived It
+186,nf,Leave Me Alone
+187,Dierks Bentley,"Woman, Amen"
+188,nf,The Search
+189,Beyoncé,Before I Let Go (Homecoming Live Bonus Track)
+190,David Lee Murphy & Kenny Chesney,Everythings Gonna Be Alright
+191,Justin Timberlake,Say Something (feat. Chris Stapleton)
+192,Lady Antebellum,What If I Never Get Over You
+193,"Lil Nas X,Billy Ray Cyrus",Old Town Road (Remix)
+194,"Pedro Capó,Farruko",Calma
+195,"Shawn Mendes,Camila Cabello,Watt,Benny Blanco,Cashmere Cat,Camilla Cabello",Señorita
+196,,
+197,Theodros Kassahun (Abugida),Theodros Kassahun --- Leman Le
+198,Theodros Kassahun (Abugida),Theodros Kassahun --- Lidjinet
+199,Theodros Kassahun (Abugida),Theodros Kassahun --- Hewan En
+200,Theodros Kassahun (Abugida),Track 02

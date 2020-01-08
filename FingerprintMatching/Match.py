@@ -6,7 +6,8 @@ import time
 
 
 class Match(threading.Thread):
-    def run(self, matches_in_bins, rtree_index, raw_data_index, audio_fingerprints, audio_fingerprints_info, tolerance=0.31):
+    def run(self, matches_in_bins, rtree_index, raw_data_index, audio_fingerprints, audio_fingerprints_info,
+            tolerance=0.31):
         count = 0
         for i in audio_fingerprints:
             # getting raw data form query hashes
@@ -28,7 +29,7 @@ class Match(threading.Thread):
                 s_time = (bx_q - ax_q) / (bx_r - ax_r)
                 s_freq = (by_q - ay_q) / (by_r - ay_r)
                 if ay_r == 0:
-                    pass
+                    pitch_cho = 100
                 else:
                     pitch_cho = ay_q / ay_r
                 # first filter
