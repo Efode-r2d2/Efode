@@ -24,6 +24,7 @@ from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
 from RawDataManager import RawDataManager
 from ConfigManager import ConfigManager
+
 # source dir
 src_dir = "../../../Test_Data/Reference_Audios"
 # r_tree path
@@ -43,8 +44,15 @@ r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
 shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
-iter = 1
-for i in mp3_files:
+audio_data = AudioManager.load_audio(audio_path=mp3_files[0],
+                                     sampling_rate=7000,
+                                     offset=10.0,
+                                     duration=1.0)
+GraphManager.display_audio_waveform(audio_data=audio_data,
+                                    sampling_rate=7000,
+                                    plot_title="Audio Waveform")
+'''iter = 1
+for i in mp3_files[0:10]:
     # audio fingerprints
     audio_fingerprints = list()
     audio_fingerprints_info = list()
@@ -79,3 +87,4 @@ for i in mp3_files:
                                value=str(raw_index))
     print("Done With Fingerprinting ", iter)
     iter += 1
+'''
