@@ -28,7 +28,7 @@ import time
 import csv
 
 # source dir
-src_dir = "../../../Test_Data/Modified_Audios_2/White_Noise/"
+src_dir = "../../../Test_Data/Modified_Audios_12/White_Noise/"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree"
 # raw data path
@@ -38,21 +38,22 @@ stft = Spectrogram(hop_length=32)
 peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
 # result path
-result_path = "../../../Results/Complexity/Efode/"
+result_path = "../../../Results/Complexity/Efode_1/"
 # r_tree index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # raw data index
 raw_data_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
-count = 1351
-for k in range(-20, 25, 5):
+wav_files = DirManager.find_wav_files(src_dir=src_dir)
+for k in range(10, 35, 5):
     # searching for all .wav files under specified source dir
-    wav_files = DirManager.find_wav_files(src_dir=src_dir + str(k))
+    count = 1
+    # wav_files = DirManager.find_wav_files(src_dir=src_dir + str(k))
     for i in wav_files:
         audio_fingerprints = list()
         audio_fingerprints_info = list()
         audio_id = i.split("/")[7].split(".")[0]
         # reading time series audio data re-sampled at 7KHz
-        audio_data = AudioManager.load_audio(audio_path=i, offset=0.0, duration=30.0)
+        audio_data = AudioManager.load_audio(audio_path=i, offset=0.0, duration=k)
         # computing spectrogram
         start = time.time()
         spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
@@ -85,7 +86,7 @@ for k in range(-20, 25, 5):
             else:
                 result = "False Positive"
         row = [count, audio_id, match[0], result, end - start, match[1]]
-        with open(result_path + "30_sec.csv", 'a') as csvFile:
+        with open(result_path + str(k) + "_sec.csv", 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
         csvFile.close()

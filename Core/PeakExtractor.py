@@ -24,8 +24,8 @@ from scipy.ndimage import minimum_filter
 
 class PeakExtractor(object):
     def __init__(self, filter_dim=10, minimum_amp_in_db=-60, num_peaks=60
-                 , maximum_filter_height=151, minimum_filter_height=3,
-                 maximum_filter_width=75, minimum_filter_width=3):
+                 , maximum_filter_height=75, minimum_filter_height=3,
+                 maximum_filter_width=150, minimum_filter_width=3):
         """
 
         :param filter_dim:
