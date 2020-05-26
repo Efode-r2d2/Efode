@@ -17,7 +17,7 @@
 """
 from ConfigManager import ConfigManager
 
-config_path = "../../Config/Config.ini"
+config_path = "../../Config/Config_CQT.ini"
 config = ConfigManager.write_config(config_file_path=config_path,
                                     section="Default",
                                     sub_section="Raw_Index", value=0)
