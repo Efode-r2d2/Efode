@@ -21,7 +21,7 @@ import numpy as np
 
 class STFT(object):
 
-    def __init__(self, n_fft=1024, hop_length=256, sr=7000):
+    def __init__(self, n_fft=1024, hop_length=32, sr=7000):
         """
 
         :param n_fft:

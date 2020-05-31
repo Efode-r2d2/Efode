@@ -35,7 +35,7 @@ raw_data_path = "../../../Raw_Data/Efode/Raw_Data_CQT"
 # config file path
 config_file_path = "../../Config/Config_CQT.ini"
 # spectrogram, peak  extractor and fingerprint generator objects
-spectrogram = CQT()
+spectrogram = CQT(hop_length=64)
 peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50)
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
@@ -47,14 +47,14 @@ shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
 print(query_audios[0])
 audio_data = AudioManager.load_audio(audio_path=query_audios[0],
-                                     sampling_rate=7000)
+                                     sampling_rate=7000, offset=0.0, duration=3.0)
 
 print(audio_data.size)
 # GraphManager.display_audio_waveform(audio_data=audio_data,
 #                                     sampling_rate=7000,
 #                                     plot_title="Audio Waveform")
 cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
-modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000)
+modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000,offset=0.0,duration=3.0)
 modified_cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=modified_audio_data)
 print(cqt_in_db.shape)
 spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
