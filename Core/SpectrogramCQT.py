@@ -21,12 +21,7 @@ import numpy as np
 
 class CQT(object):
 
-    def __init__(self, sr=7000, hop_length=256, n_bins=84, bins_per_octave=12, f_min=27.3):
-        """
-
-        :param n_fft:
-        :param hop_length:
-        """
+    def __init__(self, sr=7000, hop_length=256, n_bins=84, bins_per_octave=24, f_min=27.3):
         self.sr = sr
         self.hop_length = hop_length
         self.n_bins = n_bins
@@ -36,6 +31,7 @@ class CQT(object):
     def compute_cqt(self, audio_data):
         return librosa.cqt(y=audio_data,
                            sr=self.sr,
+                           hop_length=self.hop_length,
                            n_bins=self.n_bins,
                            bins_per_octave=self.bins_per_octave,
                            fmin=self.f_min)

@@ -18,13 +18,14 @@
 from Utilities import AudioManager
 from Utilities import GraphManager
 from Utilities import DirManager
-from Core import STFT
+from Core import CQT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
 from RawDataManager import RawDataManager
 from ConfigManager import ConfigManager
 import tkinter as tk
+
 # source dir
 src_dir = "../../../Test_Data/Reference_Audios"
 # r_tree path
@@ -34,8 +35,8 @@ raw_data_path = "../../../Raw_Data/Efode/Raw_Data_CQT"
 # config file path
 config_file_path = "../../Config/Config_CQT.ini"
 # spectrogram, peak  extractor and fingerprint generator objects
-spectrogram = STFT(hop_length=512)
-peak_extractor = PeakExtractor()
+spectrogram = CQT()
+peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50)
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
 mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
@@ -46,14 +47,18 @@ shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
 audio_data = AudioManager.load_audio(audio_path=mp3_files[0],
                                      sampling_rate=7000,
-                                     offset=10.0,
-                                     duration=300.0)
+                                     offset=20.0,
+                                     duration=10.0)
 print(audio_data.size)
 # GraphManager.display_audio_waveform(audio_data=audio_data,
 #                                     sampling_rate=7000,
 #                                     plot_title="Audio Waveform")
 cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
 print(cqt_in_db.shape)
+spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
+# GraphManager.display_spectrogram(spectrogram=cqt_in_db,plot_title="CQT")
+GraphManager.display_spectrogram_peaks(cqt_in_db, spectral_peaks[1], spectral_peaks[2], "CQT")
+print("Spectral Peaks Dimension", spectral_peaks)
 
 '''iter = 1
 for i in mp3_files[0:10]:
