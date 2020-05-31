@@ -47,19 +47,30 @@ shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
 print(query_audios[0])
 audio_data = AudioManager.load_audio(audio_path=query_audios[0],
-                                     sampling_rate=7000, offset=0.0, duration=3.0)
+                                     sampling_rate=7000)
 
 print(audio_data.size)
 # GraphManager.display_audio_waveform(audio_data=audio_data,
 #                                     sampling_rate=7000,
 #                                     plot_title="Audio Waveform")
 cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
-modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000, offset=0.0, duration=3.0)
+modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000)
 modified_cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=modified_audio_data)
 print(cqt_in_db.shape)
 spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
 spectral_peaks_2 = peak_extractor.extract_spectral_peaks_2(spectrogram=modified_cqt_in_db)
+audio_fingerprints = list()
+audio_fingerprints_info = list()
 
+fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
+                                            audio_fingerprints=audio_fingerprints,
+                                            audio_fingerprints_info=audio_fingerprints_info,
+                                            r=1.0,
+                                            c=1,
+                                            fixed=False,
+                                            no_groups=2)
+
+print(audio_fingerprints)
 #fingerprints = fingerprint_generator.generate_fingerprints(f)
 # GraphManager.display_spectrogram(spectrogram=cqt_in_db,plot_title="CQT")
 GraphManager.display_spectrogram_peaks_2(cqt_in_db, spectral_peaks[1], spectral_peaks[2], spectral_peaks_2[1],
