@@ -19,7 +19,7 @@ import librosa
 import numpy as np
 
 
-class Spectrogram(object):
+class STFT(object):
 
     def __init__(self, n_fft=1024, hop_length=256, sr=7000):
         """
@@ -59,14 +59,3 @@ class Spectrogram(object):
         stft_magnitude = self.compute_stft_magnitude(audio_data)
         stft_magnitude_in_db = librosa.amplitude_to_db(stft_magnitude, ref=np.max)
         return stft_magnitude_in_db
-
-    def compute_cqt(self, audio_data):
-        return librosa.cqt(y=audio_data, sr=self.sr, fmin=27.3)
-
-    def compute_cqt_magnitude(self, audio_data):
-        cqt = self.compute_cqt(audio_data=audio_data)
-        return np.abs(cqt)
-
-    def compute_cqt_magnitude_in_db(self, audio_data):
-        cqt_magnitude = self.compute_cqt_magnitude(audio_data=audio_data)
-        return librosa.amplitude_to_db(cqt_magnitude, ref=np.max)

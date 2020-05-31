@@ -17,7 +17,7 @@
 """
 from Utilities import AudioManager
 from Utilities import DirManager
-from Core import Spectrogram
+from Core import STFT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
 from FingerprintMatching import MatchFingerprints
@@ -34,7 +34,7 @@ r_tree_path = "../../../Hashes/Efode/R_Tree"
 # raw data path
 raw_data_path = "../../../Raw_Data/Efode/Raw_Data"
 # spectrogram, peak extractor and fingerprint generator objects
-stft = Spectrogram(hop_length=32)
+stft = STFT(hop_length=32)
 peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
 # result path

@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Core import Spectrogram
+from Core import STFT
 from Core import PeakExtractor
 from Utilities import AudioManager
 from Utilities import DirManager
@@ -24,7 +24,7 @@ from Utilities import GraphManager
 # source directory
 src_dir = "../../../Test_Data/Reference_Audios"
 # spectrogram and peak extractor objects
-stft = Spectrogram(hop_length=32)
+stft = STFT(hop_length=32)
 peak_extractor = PeakExtractor()
 # searching for all .mp3 files under given source dir
 mp3_files = DirManager.find_mp3_files(src_dir=src_dir)

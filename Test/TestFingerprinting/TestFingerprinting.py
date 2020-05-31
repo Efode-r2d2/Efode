@@ -18,7 +18,7 @@
 from Utilities import AudioManager
 from Utilities import GraphManager
 from Utilities import DirManager
-from Core import Spectrogram
+from Core import STFT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
@@ -34,7 +34,7 @@ raw_data_path = "../../../Raw_Data/Efode/Raw_Data"
 # config file path
 config_file_path = "../../Config/Config.ini"
 # spectrogram, peak  extractor and fingerprint generator objects
-stft = Spectrogram(hop_length=32)
+stft = STFT(hop_length=32)
 peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
