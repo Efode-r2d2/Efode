@@ -31,18 +31,6 @@ class FingerprintGenerator(object):
                               fixed=False,
                               tolerance=0.0,
                               no_groups=2):
-        """
-
-        :param spectral_peaks:
-        :param audio_fingerprints:
-        :param audio_fingerprints_info:
-        :param frames_per_sec:
-        :param r:
-        :param c:
-        :param fixed:
-        :param tolerance:
-        :param no_groups:
-        """
         min_frame = ((c - r / 2) * frames_per_sec) / (1 + tolerance)
         max_frame = ((c + r / 2) * frames_per_sec) / (1 - tolerance)
         for i in range(len(spectral_peaks)):
@@ -62,15 +50,6 @@ class FingerprintGenerator(object):
                                 valid_triplets,
                                 fixed=False,
                                 no_groups=2):
-        """
-
-        :param anchor: 
-        :param combs: 
-        :param valid_triplets: 
-        :param fixed: 
-        :param no_groups: 
-        :return: 
-        """
         count = 0
         for i in combs:
             a = anchor
@@ -98,15 +77,6 @@ class FingerprintGenerator(object):
                           audio_fingerprints_info,
                           min_frame,
                           max_frame):
-        """
-
-        :param anchor:
-        :param valid_triplets:
-        :param audio_fingerprints:
-        :param audio_fingerprints_info:
-        :param min_frame:
-        :param max_frame:
-        """
         for i in valid_triplets:
             a = anchor
             b = i[1]
