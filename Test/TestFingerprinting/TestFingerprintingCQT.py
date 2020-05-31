@@ -27,7 +27,7 @@ from ConfigManager import ConfigManager
 import tkinter as tk
 
 # source dir
-src_dir = "../../../Test_Data/Reference_Audios"
+src_dir = "../../../Test_Data/Query_Audios/Speed_Change"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree_CQT"
 # raw_data_path
@@ -39,24 +39,29 @@ spectrogram = CQT()
 peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50)
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+query_audios = DirManager.find_wav_files(src_dir=src_dir)
 # get r_tree_index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
 shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
-audio_data = AudioManager.load_audio(audio_path=mp3_files[0],
-                                     sampling_rate=7000,
-                                     offset=20.0,
-                                     duration=10.0)
+print(query_audios[0])
+audio_data = AudioManager.load_audio(audio_path=query_audios[0],
+                                     sampling_rate=7000)
+
 print(audio_data.size)
 # GraphManager.display_audio_waveform(audio_data=audio_data,
 #                                     sampling_rate=7000,
 #                                     plot_title="Audio Waveform")
 cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
+modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000)
+modified_cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=modified_audio_data)
 print(cqt_in_db.shape)
 spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
+spectral_peaks_2 = peak_extractor.extract_spectral_peaks_2(spectrogram=modified_cqt_in_db)
 # GraphManager.display_spectrogram(spectrogram=cqt_in_db,plot_title="CQT")
+GraphManager.display_spectrogram_peaks_2(cqt_in_db, spectral_peaks[1], spectral_peaks[2], spectral_peaks_2[1],
+                                         spectral_peaks_2[2], "Modified Vs Original")
 GraphManager.display_spectrogram_peaks(cqt_in_db, spectral_peaks[1], spectral_peaks[2], "CQT")
 print("Spectral Peaks Dimension", spectral_peaks)
 
