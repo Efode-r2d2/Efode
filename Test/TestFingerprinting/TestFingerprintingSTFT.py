@@ -54,5 +54,9 @@ modified_stft = stft.compute_stft_magnitude_in_db(audio_data=modified_audio_data
 original_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=original_stft)
 modified_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=modified_stft)
 
-GraphManager.display_spectrogram_peaks_2(original_stft, original_peaks[1], original_peaks[2], modified_peaks[1],
-                                         modified_peaks[2], "Original Vs Modified")
+GraphManager.display_spectrogram_peaks_2(original_stft,
+                                         original_peaks[1],
+                                         original_peaks[2],
+                                         modified_peaks[1],
+                                         modified_peaks[2],
+                                         "Original Vs Modified")
