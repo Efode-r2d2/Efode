@@ -61,7 +61,7 @@ class Spectrogram(object):
         return stft_magnitude_in_db
 
     def compute_cqt(self, audio_data):
-        return librosa.cqt(y=audio_data, sr=self.sr)
+        return librosa.cqt(y=audio_data, sr=self.sr, fmin=27.3)
 
     def compute_cqt_magnitude(self, audio_data):
         cqt = self.compute_cqt(audio_data=audio_data)
