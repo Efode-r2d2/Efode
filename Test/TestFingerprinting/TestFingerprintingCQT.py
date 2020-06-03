@@ -27,7 +27,7 @@ from ConfigManager import ConfigManager
 import tkinter as tk
 
 # source dir
-src_dir = "../../../Test_Data/Query_Audios/Speed_Change"
+src_dir = "../../../Test_Data/Reference_Audios"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree_CQT"
 # raw_data_path
@@ -39,41 +39,45 @@ spectrogram = CQT(hop_length=64)
 peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50)
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
-query_audios = DirManager.find_wav_files(src_dir=src_dir)
+reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
 # get r_tree_index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
 shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
-print(query_audios[0])
-audio_data = AudioManager.load_audio(audio_path=query_audios[0],
-                                     sampling_rate=7000)
+iter =0
+for i in reference_audios[0:10]:
+    # list to store audio fingerprints and raw info about audio fingerprints
+    audio_fingerprints = list()
+    audio_fingerprints_info = list()
+    # audio id
+    audio_id = i.split("/")[5].split(".")[0]
+    # time series audio data
+    audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=7000)
+    # transformed audio data using constant q transform
+    cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
+    # spectral peaks extracted from transformed audio data
+    spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
 
-print(audio_data.size)
-# GraphManager.display_audio_waveform(audio_data=audio_data,
-#                                     sampling_rate=7000,
-#                                     plot_title="Audio Waveform")
-cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
-modified_audio_data = AudioManager.load_audio(audio_path=query_audios[1], sampling_rate=7000)
-modified_cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=modified_audio_data)
-print(cqt_in_db.shape)
-spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
-spectral_peaks_2 = peak_extractor.extract_spectral_peaks_2(spectrogram=modified_cqt_in_db)
-audio_fingerprints = list()
-audio_fingerprints_info = list()
-
-fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
-                                            audio_fingerprints=audio_fingerprints,
-                                            audio_fingerprints_info=audio_fingerprints_info,
-                                            r=1.0,
-                                            c=1,
-                                            fixed=False,
-                                            no_groups=2)
-
-print(audio_fingerprints)
-#fingerprints = fingerprint_generator.generate_fingerprints(f)
-# GraphManager.display_spectrogram(spectrogram=cqt_in_db,plot_title="CQT")
-GraphManager.display_spectrogram_peaks_2(cqt_in_db, spectral_peaks[1], spectral_peaks[2], spectral_peaks_2[1],
-                                         spectral_peaks_2[2], "Modified Vs Original")
-# GraphManager.display_spectrogram_peaks(cqt_in_db, spectral_peaks[1], spectral_peaks[2], "CQT")
-print("Spectral Peaks Dimension", spectral_peaks)
+    fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
+                                                audio_fingerprints=audio_fingerprints,
+                                                audio_fingerprints_info=audio_fingerprints_info,
+                                                r=1.0,
+                                                c=1,
+                                                fixed=False,
+                                                no_groups=2)
+    raw_index = int(ConfigManager.read_config(config_file_path=config_file_path,
+                                              section="Default", sub_section="Raw_Index"))
+    fingerprint_index = 0
+    for j in audio_fingerprints:
+        row = [audio_id] + audio_fingerprints_info[fingerprint_index]
+        RTreeManager.insert_node(rtree_index=r_tree_index, node_id=raw_index, geo_hash=j)
+        RawDataManager.insert_data(shelf=shelf_index, key=raw_index, value=row)
+        raw_index += 1
+        fingerprint_index += 1
+    ConfigManager.write_config(config_file_path=config_file_path,
+                               section="Default",
+                               sub_section="Raw_Index",
+                               value=str(raw_index))
+    print("Done With Fingerprinting ", iter)
+    iter += 1
