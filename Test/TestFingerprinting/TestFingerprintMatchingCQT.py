@@ -28,7 +28,7 @@ import time
 import csv
 
 # source dir
-src_dir = "../../../Test_Data/Modified_Audios/Pitch_Shifted/94"
+src_dir = "../../../Test_Data/Modified_Audios/Pitch_Shifted/98"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree_CQT"
 # raw data path

@@ -46,7 +46,7 @@ r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
 iter =0
-for i in reference_audios[0:10]:
+for i in reference_audios:
     # list to store audio fingerprints and raw info about audio fingerprints
     audio_fingerprints = list()
     audio_fingerprints_info = list()
