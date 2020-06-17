@@ -24,8 +24,8 @@ from Utilities import GraphManager
 # source directory
 src_dir = "../../../Test_Data/Reference_Audios"
 # spectrogram and peak extractor objects
-stft = STFT(hop_length=32)
-peak_extractor = PeakExtractor()
+stft = STFT(hop_length=128)
+peak_extractor = PeakExtractor(maximum_filter_width=20, maximum_filter_height=10)
 # searching for all .mp3 files under given source dir
 mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
 # reading time series audio data re-sampled at 7KHz for a given audio portion specified by offset and duration

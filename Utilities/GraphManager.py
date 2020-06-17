@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 import librosa.display
 
 
-def display_spectrogram(spectrogram, plot_title=""):
+def display_spectrogram(spectrogram, plot_title="Spectrogram"):
     """
 
     :param spectrogram:
