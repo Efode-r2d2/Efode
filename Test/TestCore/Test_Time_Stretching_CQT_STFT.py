@@ -25,7 +25,7 @@ from Utilities import GraphManager
 # source directory for reference audios
 ref_dir = "../../../Test_Data/Ref_Audios"
 # source directory for query audios
-query_dir = "../../../Test_Data/Query_Audios/Speed_Change/104"
+query_dir = "../../../Test_Data/Query_Audios/Time_Stretched/106"
 # spectrogram and peak extractor objects
 cqt = CQT(hop_length=128)
 stft = STFT(hop_length=32)
