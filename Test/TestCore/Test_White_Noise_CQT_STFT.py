@@ -27,7 +27,7 @@ ref_dir = "../../../Test_Data/Ref_Audios"
 # source directory for query audios
 query_dir = "../../../Test_Data/Query_Audios/White_Noise/15"
 # spectrogram and peak extractor objects
-cqt = CQT(hop_length=32)
+cqt = CQT(hop_length=128)
 stft = STFT(hop_length=32)
 # peak extractor for cqt
 peak_extractor = PeakExtractor(maximum_filter_width=40, maximum_filter_height=20)
