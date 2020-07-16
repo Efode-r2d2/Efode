@@ -17,22 +17,8 @@
 """
 from LSH import HashTable
 
-
-class LSH:
-    def __init__(self, num_tables, hash_size, inp_dimensions):
-        self.num_tables = num_tables
-        self.hash_size = hash_size
-        self.inp_dimensions = inp_dimensions
-        self.hash_tables = list()
-        for i in range(self.num_tables):
-            self.hash_tables.append(HashTable(self.hash_size, self.inp_dimensions))
-
-    def __setitem__(self, inp_vec, label):
-        for table in self.hash_tables:
-            table.__setitem__(inp_vec, label)
-
-    def __getitem__(self, inp_vec):
-        results = list()
-        for table in self.hash_tables:
-            results.extend(table.__getitem__(inp_vec))
-        return results
+hashTable = HashTable(10, 2)
+print(hashTable.projections)
+vec = [[0.1, 0.1], [0.15, 0.1], [0.14, 0.1], [0.2, 0.1], [0.19, 0.1], [0.3, 0.7], [0.3, 0.65]]
+for i in vec:
+    print(hashTable.generate_hash(i))

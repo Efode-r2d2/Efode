@@ -15,10 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from LSH import HashTable
+from LSH import LSH
 
-hashTable = HashTable(10, 2)
-print(hashTable.projections)
+lsh = LSH(1, 10, 2)
 vec = [[0.1, 0.1], [0.15, 0.1], [0.14, 0.1], [0.2, 0.1], [0.19, 0.1], [0.3, 0.7], [0.3, 0.65]]
 for i in vec:
-    print(hashTable.generate_hash(i))
+    lsh.__setitem__(i, i)
+for i in vec:
+    print(lsh.__getitem__(i))
