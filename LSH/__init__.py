@@ -1,1 +1,1 @@
-from LSH.LSH import HashTable
+from LSH.HashTable import HashTable
