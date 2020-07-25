@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from LSH import HashTable
+import pickle
 
 
 class LSH:
@@ -36,3 +37,8 @@ class LSH:
         for table in self.hash_tables:
             results.extend(table.__getitem__(inp_vec))
         return results
+
+    def __dumplsh__(self, hash_path):
+        with open(hash_path, 'wb') as filehandle:
+            # store the data as binary data stream
+            pickle.dump(self.hash_tables, filehandle)

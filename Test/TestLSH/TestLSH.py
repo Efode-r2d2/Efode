@@ -16,10 +16,19 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from LSH import LSH
+import pickle
 
-lsh = LSH(1, 10, 2)
+lsh = LSH(1, 64, 2)
 vec = [[0.1, 0.1], [0.15, 0.1], [0.14, 0.1], [0.2, 0.1], [0.19, 0.1], [0.3, 0.7], [0.3, 0.65]]
 for i in vec:
     lsh.__setitem__(i, i)
 for i in vec:
     print(lsh.__getitem__(i))
+#lsh.__dumplsh__()
+with open('hash2.data', 'wb') as filehandle:
+    # store the data as binary data stream
+    pickle.dump(lsh, filehandle)
+with open('hash2.data', 'rb') as filehandle:
+    # read the data as binary data stream
+    lsh2 = pickle.load(filehandle)
+print(lsh2.__getitem__([0.1, 0.1]))
