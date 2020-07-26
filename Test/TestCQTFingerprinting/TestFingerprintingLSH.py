@@ -34,7 +34,7 @@ peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50
 # fingerprint generator
 fingerprint_generator = FingerprintGenerator()
 # locality sensitive hashing
-lsh = LSH(1, 32, 2)
+lsh = LSH(1,32, 2)
 # searching for all .mp3 files under specified source dir
 reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
 # fingerprinting files
@@ -69,4 +69,6 @@ for i in reference_audios[0:10]:
         fingerprint_index += 1
     print("Done With Fingerprinting ", iter)
     iter += 1
-lsh.__dumplsh__(hash_path=lsh_path)
+with open(lsh_path, 'wb') as filehandle:
+    # store the data as binary data stream
+    pickle.dump(lsh, filehandle)

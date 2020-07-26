@@ -18,11 +18,12 @@
 from LSH import LSH
 import pickle
 
-lsh = LSH(1, 64, 2)
+lsh = LSH(1, 20, 2)
 vec = [[0.1, 0.1], [0.15, 0.1], [0.14, 0.1], [0.2, 0.1], [0.19, 0.1], [0.3, 0.7], [0.3, 0.65]]
 for i in vec:
     lsh.__setitem__(i, i)
 for i in vec:
+    pass
     print(lsh.__getitem__(i))
 #lsh.__dumplsh__()
 with open('hash2.data', 'wb') as filehandle:

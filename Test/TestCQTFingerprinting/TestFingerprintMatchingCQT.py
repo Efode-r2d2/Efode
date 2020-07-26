@@ -28,7 +28,7 @@ import time
 import csv
 
 # source dir
-src_dir = "../../../Test_Data/Modified_Audios/Pitch_Shifted/"
+src_dir = "../../../Test_Data/Modified_Audios/Speed_Change/"
 # r_tree path
 r_tree_path = "../../../Hashes/Efode/R_Tree_CQT"
 # raw data path
@@ -43,10 +43,10 @@ r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 raw_data_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 
 # traversing through  all modified query audio directories
-for d in range(84, 118, 2):
+for d in range(70, 118, 2):
     # retrieving wav files from each query audio directories
     wav_files = DirManager.find_wav_files(src_dir=src_dir+str(d))
-    for k in range(30, 35, 5):
+    for k in range(5, 10, 5):
         # searching for all .wav files under specified source dir
         count = 1
         # wav_files = DirManager.find_wav_files(src_dir=src_dir + str(k))

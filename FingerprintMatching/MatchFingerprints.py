@@ -51,4 +51,3 @@ def match_fingerprints(rtree_index, raw_data_index, audio_fingerprints, audio_fi
                   audio_fingerprints_info=raw_datas[count], tolerance=tolerance)
         count += 1
     return matches_in_bins
-
