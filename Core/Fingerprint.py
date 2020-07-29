@@ -45,7 +45,7 @@ class Fingerprint(object):
             valid_triplets = list()
             # a target zone for a given spectral peak
             target_zone = [j for j in spectral_peaks if
-                           spectral_peaks[i][0] + self.min_frame_number <= j[0] <= spectral_peaks[i][
+                           i[0] + self.min_frame_number <= j[0] <= i[
                                0] + self.max_frame_number]
             # all triplets formed from a given target zone
             all_triplets = list(combinations(target_zone, 2))
@@ -55,6 +55,7 @@ class Fingerprint(object):
             if len(valid_triplets) > 0:
                 self.__geometric_hash__(root_peak=i, valid_triplets=valid_triplets,
                                         audio_fingerprints=audio_fingerprints)
+        return audio_fingerprints
 
     def __geometric_hash__(self, root_peak, valid_triplets, audio_fingerprints):
         for i in valid_triplets:
