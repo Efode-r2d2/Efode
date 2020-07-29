@@ -22,7 +22,8 @@ class FingerprintGenerator(object):
     def __init__(self):
         pass
 
-    def generate_fingerprints(self, spectral_peaks,
+    def generate_fingerprints(self,
+                              spectral_peaks,
                               audio_fingerprints,
                               audio_fingerprints_info,
                               frames_per_sec=219,

@@ -42,7 +42,7 @@ matching = Matching(lsh_path=lsh_path)
 # traversing through  all modified query audio directories
 for d in range(90, 102, 2):
     # retrieving wav files from each query audio directories
-    wav_files = DirManager.find_wav_files(src_dir=src_dir+str(d))
+    wav_files = DirManager.find_wav_files(src_dir=src_dir + str(d))
     for k in range(30, 35, 5):
         # searching for all .wav files under specified source dir
         count = 1
@@ -67,7 +67,8 @@ for d in range(90, 102, 2):
                                                         fixed=False,
                                                         no_groups=100,
                                                         tolerance=0.31)
-            matches_in_bins = matching.__match__(audio_fingerprints=audio_fingerprints,audio_fingerprints_info=audio_fingerprints_info)
-            #print(matches_in_bins)
+            matches_in_bins = matching.__match__(audio_fingerprints=audio_fingerprints,
+                                                 audio_fingerprints_info=audio_fingerprints_info)
+            # print(matches_in_bins)
             match = VerifyMatches.verify_matches(matches_in_bins=matches_in_bins)
             print(match, audio_id)

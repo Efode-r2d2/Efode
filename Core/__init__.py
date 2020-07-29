@@ -19,3 +19,4 @@ from Core.PeakExtractor import PeakExtractor
 from Core.SpectrogramSTFT import STFT
 from Core.SpectrogramCQT import CQT
 from Core.FingerprintGenerator import FingerprintGenerator
+from Core.Fingerprint import Fingerprint
