@@ -17,7 +17,7 @@
 """
 from ConfigManager import ConfigManager
 
-config_path = "../../Config/Config_CQT_2.ini"
+config_path = "../../Config/Config_STFT_Test.ini"
 config = ConfigManager.write_config(config_file_path=config_path,
                                     section="Default",
-                                    sub_section="Raw_Index", value=0)
+                                    sub_section="Node_ID", value=0)
