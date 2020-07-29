@@ -68,4 +68,4 @@ class Fingerprint(object):
             p3y_new = round(((p3[1] - p1[1]) / (p2[1] - p1[1])), 3)
             # filtering fingerprints based on the
             if p3x_new > (self.min_frame_number / self.max_frame_number) - 0.02:
-                audio_fingerprints.append([[p3x_new, p3y_new], p1[0], p1[1], p2[0], p2[1]])
+                audio_fingerprints.append([[p3x_new, p3y_new], [p1[0], p1[1], p2[0], p2[1]]])
