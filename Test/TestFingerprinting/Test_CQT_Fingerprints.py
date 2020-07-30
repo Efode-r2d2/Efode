@@ -30,7 +30,7 @@ MAXIMUM_FILTER_WIDTH = 50  # maximum filter width
 MAXIMUM_FILTER_HEIGHT = 25  # maximum filter height
 FRAMES_PER_SECOND = 219  # number of audio frames for one second audio duration
 TARGET_ZONE_WIDTH = 1  # width of the target zone in seconds
-TARGET_ZONE_CENTER = 2  # center of the target zone in seconds
+TARGET_ZONE_CENTER = 1  # center of the target zone in seconds
 TOLERANCE = 0.0  # maximum allowed tolerance for both pitch shifting and time stretching
 
 # source directory for reference audios

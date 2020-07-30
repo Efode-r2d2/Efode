@@ -16,10 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from collections import defaultdict
-from RTreeManager import RTreeManager
-from RawDataManager import RawDataManager
+
 from FingerprintMatching.Match import Match
-import numpy as np
 
 
 def divide_chunks(l, n):
@@ -28,26 +26,19 @@ def divide_chunks(l, n):
         yield l[i:i + n]
 
 
-def match_fingerprints(rtree_index, raw_data_index, audio_fingerprints, audio_fingerprints_info, tolerance=0.31):
+def match_fingerprints(rtree_index, raw_data_index, fingerprints, tolerance=0.31):
     """
 
+    :param fingerprints:
     :param rtree_index:
     :param raw_data_index:
-    :param audio_fingerprints:
-    :param audio_fingerprints_info:
     :param tolerance:
     :return:
     """
-    fingerprints = list(divide_chunks(audio_fingerprints, 200))
-    raw_datas = list(divide_chunks(audio_fingerprints_info, 200))
-    count = 0
+    fingerprint_chunks = list(divide_chunks(fingerprints, 100))
     matches_in_bins = defaultdict(list)
-    for i in fingerprints:
+    for i in fingerprint_chunks:
         match = Match()
-        match.run(matches_in_bins=matches_in_bins,
-                  raw_data_index=raw_data_index,
-                  rtree_index=rtree_index,
-                  audio_fingerprints=i,
-                  audio_fingerprints_info=raw_datas[count], tolerance=tolerance)
-        count += 1
+        match.run(matches_in_bins=matches_in_bins, rtree_index=rtree_index, raw_data_index=raw_data_index,
+                  fingerprints=i, tolerance=tolerance)
     return matches_in_bins
