@@ -26,8 +26,8 @@ from FingerprintManager import FingerprintManager
 # defining constants
 SAMPLING_RATE = 7000  # sampling rate
 HOP_LENGTH = 32  # hop length
-MAXIMUM_FILTER_WIDTH = 50  # maximum filter width
-MAXIMUM_FILTER_HEIGHT = 25  # maximum filter height
+MAXIMUM_FILTER_WIDTH = 150  # maximum filter width
+MAXIMUM_FILTER_HEIGHT = 75  # maximum filter height
 FRAMES_PER_SECOND = 219  # number of audio frames for one second audio duration
 TARGET_ZONE_WIDTH = 1  # width of the target zone in seconds
 TARGET_ZONE_CENTER = 2  # center of the target zone in seconds
@@ -75,7 +75,7 @@ reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
 for i in reference_audios:
     audio_id = i.split("/")[5].split(".")[0]
     audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=SAMPLING_RATE)
-    spectrogram = stft.compute_cqt_magnitude_in_db(audio_data=audio_data)
+    spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
     audio_fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])
     fingerprint_manager.__store_fingerprints__(audio_fingerprints=audio_fingerprints, audio_id=audio_id)
