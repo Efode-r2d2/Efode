@@ -1,6 +1,6 @@
 import threading
 from RTreeManager import RTreeManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 import numpy as np
 
 
@@ -12,6 +12,12 @@ class Match(threading.Thread):
             p1y_q = i[1][1]
             p2x_q = i[1][2]
             p2y_q = i[1][3]
+
+            min_t_delta = 1 / (1 + tolerance)
+            max_t_delta = 1 / (1 - tolerance)
+            min_f_delta = 1 / (1 + tolerance)
+            max_f_delta = 1 / (1 - tolerance)
+
             candidate_matches = RTreeManager.get_nearest_node(rtree_index, i[0])
             for m in candidate_matches:
                 raw_data = RawDataManager.get_data(shelf=raw_data_index, key=m)
@@ -19,10 +25,7 @@ class Match(threading.Thread):
                 p1y_r = raw_data[2]
                 p2x_r = raw_data[3]
                 p2y_r = raw_data[4]
-                min_t_delta = 1 / (1 + tolerance)
-                max_t_delta = 1 / (1 - tolerance)
-                min_f_delta = 1 / (1 + tolerance)
-                max_f_delta = 1 / (1 - tolerance)
+
                 s_time = (p2x_q - p1x_q) / (p2x_r - p1x_r)
                 s_freq = (p2y_q - p1y_q) / (p2y_r - p1y_r)
                 if p1y_r == 0:

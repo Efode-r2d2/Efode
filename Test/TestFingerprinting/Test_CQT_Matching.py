@@ -3,7 +3,7 @@ from Core import Fingerprint
 from Core import PeakExtractor
 from Utilities import AudioManager
 from Utilities import DirManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 from RTreeManager import RTreeManager
 from FingerprintMatching import MatchFingerprints
 from FingerprintMatching import VerifyMatches
@@ -13,9 +13,9 @@ import time
 
 # defining constants
 SAMPLING_RATE = 7000  # sampling rate
-HOP_LENGTH = 32  # hop length
+HOP_LENGTH = 64  # hop length
 MAXIMUM_FILTER_WIDTH = 50  # maximum filter width
-MAXIMUM_FILTER_HEIGHT = 25  # maximum filter height
+MAXIMUM_FILTER_HEIGHT = 20  # maximum filter height
 FRAMES_PER_SECOND = 219  # number of audio frames for one second audio duration
 TARGET_ZONE_WIDTH = 1  # width of the target zone in seconds
 TARGET_ZONE_CENTER = 1  # center of the target zone in seconds
@@ -58,7 +58,7 @@ fingerprint = Fingerprint(frames_per_second=FRAMES_PER_SECOND, target_zone_width
     For these experiments we will start with speed change and finalize the experiment 
     by using noise added query audios
 '''
-for i in range(98, 132, 2):
+for i in range(80, 132, 2):
     # retrieving all query audios under a give directory
     query_audios = DirManager.find_wav_files(src_dir=src_dir + str(i))
     for j in query_audios:
@@ -74,6 +74,7 @@ for i in range(98, 132, 2):
         # matching fingerprints
         matches_in_bins = MatchFingerprints.match_fingerprints(rtree_index=r_tree_index, raw_data_index=raw_data_index,
                                                                fingerprints=fingerprints, tolerance=TOLERANCE)
+        # verifying matches
         match = VerifyMatches.verify_matches(matches_in_bins=matches_in_bins)
         end = time.time()
         print(match, j, end - start)

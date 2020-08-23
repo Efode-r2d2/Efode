@@ -23,7 +23,7 @@ from Core import FingerprintGenerator
 from FingerprintMatching import MatchFingerprints
 from FingerprintMatching import VerifyMatches
 from RTreeManager import RTreeManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 import time
 import csv
 

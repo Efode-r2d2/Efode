@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from ConfigManager import ConfigManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 from RTreeManager import RTreeManager
 
 

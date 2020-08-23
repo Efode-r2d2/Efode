@@ -23,9 +23,9 @@ class Matching:
                 ay_r = m[2]
                 bx_r = m[3]
                 by_r = m[4]
-                #vec2 = m[5]
-                #similarity = self.__cosine_sim(i,vec2)
-                similarity=0.91
+                # vec2 = m[5]
+                # similarity = self.__cosine_sim(i,vec2)
+                similarity = 0.91
                 if similarity > 0.9:
                     min_t_delta = 1 / (1 + tolerance)
                     max_t_delta = 1 / (1 - tolerance)
@@ -47,5 +47,5 @@ class Matching:
             count += 1
         return matches_in_bins
 
-    def __cosine_sim(self,vec1, vec2):
+    def __cosine_sim(self, vec1, vec2):
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))

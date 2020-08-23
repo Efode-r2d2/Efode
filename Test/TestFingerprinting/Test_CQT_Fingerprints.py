@@ -25,9 +25,9 @@ from FingerprintManager import FingerprintManager
 
 # defining constants
 SAMPLING_RATE = 7000  # sampling rate
-HOP_LENGTH = 32  # hop length
+HOP_LENGTH = 64  # hop length
 MAXIMUM_FILTER_WIDTH = 50  # maximum filter width
-MAXIMUM_FILTER_HEIGHT = 25  # maximum filter height
+MAXIMUM_FILTER_HEIGHT = 20  # maximum filter height
 FRAMES_PER_SECOND = 219  # number of audio frames for one second audio duration
 TARGET_ZONE_WIDTH = 1  # width of the target zone in seconds
 TARGET_ZONE_CENTER = 1  # center of the target zone in seconds

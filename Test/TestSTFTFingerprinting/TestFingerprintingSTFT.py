@@ -22,7 +22,7 @@ from Core import STFT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 from ConfigManager import ConfigManager
 
 # source dir
@@ -42,7 +42,7 @@ query_audios = DirManager.find_wav_files(src_dir=src_dir)
 # get r_tree_index
 # r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
-# shelf_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
+# shelf_index = DataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # fingerprinting files
 
 original_audio_data = AudioManager.load_audio(audio_path=query_audios[0], sampling_rate=7000)

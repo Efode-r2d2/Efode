@@ -22,7 +22,7 @@ from Core import CQT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
 from RTreeManager import RTreeManager
-from RawDataManager import RawDataManager
+from DataManager import RawDataManager
 from ConfigManager import ConfigManager
 import tkinter as tk
 
