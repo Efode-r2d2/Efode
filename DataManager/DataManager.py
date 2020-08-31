@@ -81,7 +81,7 @@ def __radius_nn__(cursor, hash, e=0.01):
 
 def __store_triplet__(cursor, triplet, record_id):
     hash_id = cursor.lastrowid
-    values = (hash_id, record_id, int(triplet[0]), int(triplet[1]))
+    values = (hash_id, record_id, int(triplet[0]), int(triplet[1]), int(triplet[2]), int(triplet[3]))
     cursor.execute("""INSERT INTO Quads
                          VALUES (?,?,?,?,?,?)""", values)
 
@@ -148,6 +148,31 @@ def __store_peaks__(curosr, spectral_peaks, record_id):
                      VALUES (?,?,?)""", (record_id, int(i[0]), int(i[1])))
 
 
+def __filter_candidates__(conn, cursor, query_quad, filtered, tolerance=0.31, e_fine=1.8):
+    for hash_ids in cursor:
+        reference_quad, record_id = __lookup_triplets__(conn, hash_ids)
+        # Rough pitch coherence:
+        #   1/(1+e) <= queAy/canAy <= 1/(1-e)
+        if not 1 / (1 + tolerance) <= query_quad[1] / reference_quad[1] <= 1 / (1 - tolerance):
+            continue
+        # X transformation tolerance check:
+        #   sTime = (queBx-queAx)/(canBx-canAx)
+        sTime = (query_quad[2] - query_quad[0]) / (reference_quad[2] - reference_quad[0])
+        if not 1 / (1 + tolerance) <= sTime <= 1 / (1 - tolerance):
+            continue
+        # Y transformation tolerance check:
+        #   sFreq = (queBy-queAy)/(canBy-canAy)
+        sFreq = (query_quad[3] - query_quad[1]) / (reference_quad[3] - reference_quad[1])
+        if not 1 / (1 + tolerance) <= sFreq <= 1 / (1 - tolerance):
+            continue
+        # Fine pitch coherence:
+        #   |queAy-canAy*sFreq| <= eFine
+        if not abs(query_quad[1] - (reference_quad[1] * sFreq)) <= e_fine:
+            continue
+        offset = reference_quad[0] - (query_quad[0] * sTime)
+        filtered[record_id].append((offset, (sTime, sFreq)))
+
+
 class DataManager(object):
     def __init__(self, db_path):
         self.db_path = db_path
@@ -168,7 +193,7 @@ class DataManager(object):
             cursor = conn.cursor()
             if not __record_exists__(cursor=cursor, title=title):
                 record_id = __store_record__(cursor=cursor, title=title)
-                __store_peaks__(curosr=cursor, spectral_peaks=spectral_peaks, record_id=record_id)
+                # __store_peaks__(curosr=cursor, spectral_peaks=spectral_peaks, record_id=record_id)
                 for i in fingerprints:
                     __store_hash__(cursor=cursor, hash=i[0])
                     __store_triplet__(cursor=cursor, triplet=i[1], record_id=record_id)
@@ -180,15 +205,15 @@ class DataManager(object):
         conn = sqlite3.connect(self.db_path)
 
         cursor = conn.cursor()
-        if len(match_candidates) > 0:
-            print(self._lookup_record(c=cursor, recordid=match_candidates[0].recordid))
+        if len(match_candidates) > 0 and match_candidates[0].num_matches > 5:
+            print(self._lookup_record(c=cursor, recordid=match_candidates[0].recordid), match_candidates[0])
         else:
             print("No Match Found")
-        matches = [m for m in
+        '''matches = [m for m in
                    [self._validate_match(spectral_peaks=spectral_peaks, cursor=cursor, match_candidate=mc) for mc in
                     match_candidates] if
                    m.vScore >= vThreshold]
-        # print(matches)
+        print(matches)'''
         cursor.close()
         conn.close()
 
@@ -199,7 +224,7 @@ class DataManager(object):
         for i in audio_fingerprints:
             __radius_nn__(cursor, i[0])
             with np.errstate(divide='ignore', invalid='ignore'):
-                self.__filter_candidates__(conn, cursor, i[1], filtered)
+                __filter_candidates__(conn, cursor, i[1], filtered)
         binned = {k: __bin_times__(v) for k, v in filtered.items()}
         results = {k: __scales__(v)
                    for k, v in binned.items() if len(v) >= 4}
@@ -207,31 +232,8 @@ class DataManager(object):
                             for k, v in results.items() for a in v]
         cursor.close()
         conn.close()
-        return match_candidates
-
-    def __filter_candidates__(self, conn, cursor, query_quad, filtered, tolerance=0.31, e_fine=1.8):
-        for hash_ids in cursor:
-            reference_quad, record_id = __lookup_triplets__(conn, hash_ids)
-            # Rough pitch coherence:
-            #   1/(1+e) <= queAy/canAy <= 1/(1-e)
-            if not 1 / (1 + tolerance) <= query_quad[1] / reference_quad[1] <= 1 / (1 - tolerance):
-                continue
-            # X transformation tolerance check:
-            #   sTime = (queBx-queAx)/(canBx-canAx)
-            sTime = (query_quad[2] - query_quad[0]) / (reference_quad[2] - reference_quad[0])
-            if not 1 / (1 + tolerance) <= sTime <= 1 / (1 - tolerance):
-                continue
-            # Y transformation tolerance check:
-            #   sFreq = (queBy-queAy)/(canBy-canAy)
-            sFreq = (query_quad[3] - query_quad[1]) / (reference_quad[3] - reference_quad[1])
-            if not 1 / (1 + tolerance) <= sFreq <= 1 / (1 - tolerance):
-                continue
-            # Fine pitch coherence:
-            #   |queAy-canAy*sFreq| <= eFine
-            if not abs(query_quad[1] - (reference_quad[1] * sFreq)) <= e_fine:
-                continue
-            offset = reference_quad[0] - (query_quad[0] * sTime)
-            filtered[record_id].append((offset, (sTime, sFreq)))
+        sorted_match = sorted(match_candidates, key=operator.itemgetter(2), reverse=True)
+        return sorted_match
 
     def _validate_match(self, spectral_peaks, cursor, match_candidate):
         """

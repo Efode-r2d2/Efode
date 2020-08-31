@@ -3,9 +3,8 @@ import csv
 accuracy = list()
 precision = list()
 x_axis = list()
-for i in range(-20, 25, 5):
-
-    with open("../../Results_2/Quad/Robustness/White_Noise/"+str(i)+".csv", 'r') as csvFile:
+for i in range(5, 35, 5):
+    with open("../../Results_2/Quad/Granularity/"+str(i) + "_sec.csv", 'r') as csvFile:
         reader = list(csv.reader(csvFile, delimiter=','))
         result = [i[3] for i in reader]
         true_positive = result.count("True Positive")
@@ -20,8 +19,8 @@ for i in range(-20, 25, 5):
         accuracy.append(a)
         precision.append(p)
         x_axis.append(i)
-row = ["White_Noise", "Accuracy", "Precision"]
-result_path = "../../Results_2/quad_white_noise.csv"
+row = ["Duration", "Accuracy", "Precision"]
+result_path = "../../Results_2/quad_complexity.csv"
 with open(result_path, 'a') as csvFile:
     writer = csv.writer(csvFile)
     writer.writerow(row)
