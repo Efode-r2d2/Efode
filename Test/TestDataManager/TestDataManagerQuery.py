@@ -28,7 +28,7 @@ for i in query_audios:
                                           duration=30.0)
     # computing stft based spectrogram of time series audio data
 
-    spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+    spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks from STFT based spectrogram
     spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate quad based fingerprints

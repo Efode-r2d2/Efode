@@ -44,11 +44,11 @@ query_audio_data = audio_manager.load_audio(audio_path=query_audios[0])
 # computing cqt based spectrogram of reference audio
 reference_cqt_spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=reference_audio_data)
 # computing stft based spectrogram of reference audio
-reference_stft_spectrogram = stft.compute_stft_magnitude_in_db(audio_data=reference_audio_data)
+reference_stft_spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=reference_audio_data)
 # computing cqt based spectrogram of query audio
 query_cqt_spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=query_audio_data)
 # computing stft based spectrogram of reference audio
-query_stft_spectrogram = stft.compute_stft_magnitude_in_db(audio_data=query_audio_data)
+query_stft_spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=query_audio_data)
 # extract spectral peaks from cqt based spectrogram of reference audio
 reference_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=reference_cqt_spectrogram)
 # extract spectral peaks from stft based spectrogram of reference audio

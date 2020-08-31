@@ -34,7 +34,7 @@ mp3_files = dir_manager.find_mp3_files(src_dir=src_dir)
 # parameters
 audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=10.0)
 # computing spectrogram
-spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
 # extracting spectral peaks
 spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
 # generate fingerprints

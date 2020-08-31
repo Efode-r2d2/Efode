@@ -48,8 +48,8 @@ query_audios = dir_manager.find_wav_files(src_dir=src_dir)
 original_audio_data = audio_manager.load_audio(audio_path=query_audios[0], sr=7000)
 modified_audio_data = audio_manager.load_audio(audio_path=query_audios[1], sr=7000)
 
-original_stft = stft.compute_stft_magnitude_in_db(audio_data=original_audio_data)
-modified_stft = stft.compute_stft_magnitude_in_db(audio_data=modified_audio_data)
+original_stft = stft.compute_spectrogram_magnitude_in_db(audio_data=original_audio_data)
+modified_stft = stft.compute_spectrogram_magnitude_in_db(audio_data=modified_audio_data)
 
 original_peaks = peak_extractor.extract_spectral_peaks(spectrogram=original_stft)
 modified_peaks = peak_extractor.extract_spectral_peaks(spectrogram=modified_stft)

@@ -54,7 +54,7 @@ for i in mp3_files:
     # reading time series audio data re-sampled at 7KHz
     audio_data = audio_manager.load_audio(audio_path=i)
     # computing spectrogram of the audio
-    spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+    spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks
     spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate fingerprints

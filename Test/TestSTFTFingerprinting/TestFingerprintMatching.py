@@ -56,7 +56,7 @@ for k in range(10, 35, 5):
         audio_data = audio_manager.load_audio(audio_path=i, offset=0.0, duration=k)
         # computing spectrogram
         start = time.time()
-        spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+        spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
         # extracting spectral peaks
         spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
         # generating fingerprints

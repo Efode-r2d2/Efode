@@ -22,7 +22,7 @@ for i in reference_audios[0:2]:
     # loading time series audio data of one of reference audio
     audio_data = audio_manager.load_audio(audio_path=i, sr=7000)
     # computing the spectrogram of time series audio data
-    spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
+    spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks from STFT based spectrogram
     spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate fingerprints using the association of four spectral peaks
