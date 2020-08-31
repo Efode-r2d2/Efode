@@ -15,14 +15,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Utilities import AudioManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import dir_manager
 
 # source directory
 src_dir = "../../../Test_Data/Reference_Audios"
 # searching all .mp3 files under given source dir
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+mp3_files = dir_manager.find_mp3_files(src_dir=src_dir)
 # reading audio data re-sampled at 7KHz for a given audio portion specified by offset and duration parameters
-audio_data = AudioManager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=2.0)
+audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=2.0)
 # size of audio data
 print(len(audio_data))

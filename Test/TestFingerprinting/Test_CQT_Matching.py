@@ -1,8 +1,8 @@
 from Core import CQT
 from Core import Fingerprint
 from Core import PeakExtractor
-from Utilities import AudioManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import dir_manager
 from DataManager import RawDataManager
 from RTreeManager import RTreeManager
 from FingerprintMatching import MatchFingerprints
@@ -60,11 +60,11 @@ fingerprint = Fingerprint(frames_per_second=FRAMES_PER_SECOND, target_zone_width
 '''
 for i in range(80, 132, 2):
     # retrieving all query audios under a give directory
-    query_audios = DirManager.find_wav_files(src_dir=src_dir + str(i))
+    query_audios = dir_manager.find_wav_files(src_dir=src_dir + str(i))
     for j in query_audios:
         start = time.time()
         # loading a 30 second time series audio data
-        audio_data = AudioManager.load_audio(audio_path=j, sampling_rate=SAMPLING_RATE, offset=0.0, duration=30.0)
+        audio_data = audio_manager.load_audio(audio_path=j, sr=SAMPLING_RATE, offset=0.0, duration=30.0)
         # computing the spectrogram for a given time series audio data
         spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
         # extracting spectral peaks from a given spectrogram

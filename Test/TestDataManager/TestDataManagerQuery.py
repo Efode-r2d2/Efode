@@ -1,5 +1,5 @@
-from Utilities import DirManager
-from Utilities import AudioManager
+from Utilities import dir_manager
+from Utilities import audio_manager
 from Core import STFT
 from Core import PeakExtractor
 from Core import Fingerprint
@@ -9,7 +9,7 @@ import time
 # source directory for query audios
 src_dir = "../../../Test_Data/Modified_Audios/Speed_Change/94"
 # retrieving all query audios under specified directory
-query_audios = DirManager.find_wav_files(src_dir=src_dir)
+query_audios = dir_manager.find_wav_files(src_dir=src_dir)
 # an object for computing stft based spectrogram
 stft = STFT(n_fft=1024, hop_length=32, sr=700)
 # an object to extract spectral peaks from stft based spectrogram
@@ -22,10 +22,10 @@ for i in query_audios:
     print(i)
     # loading a time series audio data from one of the query audio
 
-    audio_data = AudioManager.load_audio(audio_path=i,
-                                         sampling_rate=7000,
-                                         offset=10.0,
-                                         duration=30.0)
+    audio_data = audio_manager.load_audio(audio_path=i,
+                                          sr=7000,
+                                          offset=10.0,
+                                          duration=30.0)
     # computing stft based spectrogram of time series audio data
 
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)

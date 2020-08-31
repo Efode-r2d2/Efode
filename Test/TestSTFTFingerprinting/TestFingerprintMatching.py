@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Utilities import AudioManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import dir_manager
 from Core import STFT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
@@ -43,7 +43,7 @@ result_path = "../../../Results/Complexity/Efode_1/"
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # raw data index
 raw_data_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
-wav_files = DirManager.find_wav_files(src_dir=src_dir)
+wav_files = dir_manager.find_wav_files(src_dir=src_dir)
 for k in range(10, 35, 5):
     # searching for all .wav files under specified source dir
     count = 1
@@ -53,7 +53,7 @@ for k in range(10, 35, 5):
         audio_fingerprints_info = list()
         audio_id = i.split("/")[7].split(".")[0]
         # reading time series audio data re-sampled at 7KHz
-        audio_data = AudioManager.load_audio(audio_path=i, offset=0.0, duration=k)
+        audio_data = audio_manager.load_audio(audio_path=i, offset=0.0, duration=k)
         # computing spectrogram
         start = time.time()
         spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)

@@ -16,8 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from Utilities import DirManager
-from Utilities import AudioManager
+from Utilities import dir_manager
+from Utilities import audio_manager
 from Core import CQT
 from Core import PeakExtractor
 from Core import Fingerprint
@@ -70,12 +70,12 @@ fingerprint = Fingerprint(frames_per_second=FRAMES_PER_SECOND, target_zone_width
 fingerprint_manager = FingerprintManager(r_tree=r_tree, shelf=shelf, config=config)
 
 # finding all reference audios
-reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
+reference_audios = dir_manager.find_mp3_files(src_dir=src_dir)
 
 # fingerprinting all reference audios
 for i in reference_audios:
     audio_id = i.split("/")[5].split(".")[0]
-    audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=SAMPLING_RATE)
+    audio_data = audio_manager.load_audio(audio_path=i, sr=SAMPLING_RATE)
     spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
     spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
     audio_fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])

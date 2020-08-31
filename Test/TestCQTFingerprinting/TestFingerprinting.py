@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Utilities import AudioManager
-from Utilities import GraphManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import graph_manager
+from Utilities import dir_manager
 from Core import STFT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
@@ -38,7 +38,7 @@ stft = STFT(hop_length=32)
 peak_extractor = PeakExtractor()
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+mp3_files = dir_manager.find_mp3_files(src_dir=src_dir)
 # get r_tree_index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
@@ -52,7 +52,7 @@ for i in mp3_files:
     # extracting audio id
     audio_id = i.split("/")[5].split(".")[0]
     # reading time series audio data re-sampled at 7KHz
-    audio_data = AudioManager.load_audio(audio_path=i)
+    audio_data = audio_manager.load_audio(audio_path=i)
     # computing spectrogram of the audio
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks

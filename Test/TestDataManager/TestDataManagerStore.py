@@ -1,5 +1,5 @@
-from Utilities import DirManager
-from Utilities import AudioManager
+from Utilities import dir_manager
+from Utilities import audio_manager
 from Core import STFT
 from Core import PeakExtractor
 from Core import Fingerprint
@@ -8,7 +8,7 @@ from DataManager import DataManager
 # Source directory for reference audio files
 src_dir = "../../../Test_Data/Reference_Audios/"
 # retrieving all reference audios under specified source directory
-reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
+reference_audios = dir_manager.find_mp3_files(src_dir=src_dir)
 # an object for Short Time Fourier Transform
 stft = STFT(n_fft=1024, hop_length=32, sr=7000)
 # an object to extract spectral peaks from STFT based spectrogram
@@ -20,7 +20,7 @@ data_manager = DataManager("../../../Hashes/Efode/Efode4.db")
 for i in reference_audios[0:2]:
     audio_title = i.split("/")[5].split(".")[0]
     # loading time series audio data of one of reference audio
-    audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=7000)
+    audio_data = audio_manager.load_audio(audio_path=i, sr=7000)
     # computing the spectrogram of time series audio data
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks from STFT based spectrogram

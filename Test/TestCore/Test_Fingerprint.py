@@ -18,8 +18,8 @@
 from Core import Fingerprint
 from Core import CQT
 from Core import PeakExtractor
-from Utilities import AudioManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import dir_manager
 
 # audios test directory
 src_dir = "../../../Test_Data/Reference_Audios"
@@ -33,9 +33,9 @@ fingerprint = Fingerprint(frames_per_second=219,
                           target_zone_center=4,
                           tolerance=0.0)
 # finding all .mp3 audios from reference audios directory
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+mp3_files = dir_manager.find_mp3_files(src_dir=src_dir)
 # loading an audio file
-audio_data = AudioManager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=10.0)
+audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=10.0)
 print(audio_data)
 spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
 print(spectrogram.shape)

@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Utilities import AudioManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import dir_manager
 from Core import CQT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
@@ -46,8 +46,8 @@ raw_data_index = RawDataManager.get_shelf_file_index(shelf_path=raw_data_path)
 # traversing through  all modified query audio directories
 for d in range(-5, 25, 5):
     # retrieving wav files from each query audio directories
-    wav_files = DirManager.find_wav_files(src_dir=src_dir+str(d))
-    DirManager.create_dir(result_path+str(d))
+    wav_files = dir_manager.find_wav_files(src_dir=src_dir + str(d))
+    dir_manager.create_dir(result_path + str(d))
     for k in range(30, 35, 5):
         # searching for all .wav files under specified source dir
         count = 151
@@ -57,7 +57,7 @@ for d in range(-5, 25, 5):
             audio_fingerprints_info = list()
             audio_id = i.split("/")[7].split(".")[0]
             # reading time series audio data re-sampled at 7KHz
-            audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=7000, offset=0.0, duration=k)
+            audio_data = audio_manager.load_audio(audio_path=i, sr=7000, offset=0.0, duration=k)
             # computing spectrogram
             start = time.time()
             spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)

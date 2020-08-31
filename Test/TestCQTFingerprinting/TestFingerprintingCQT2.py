@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Utilities import AudioManager
-from Utilities import GraphManager
-from Utilities import DirManager
+from Utilities import audio_manager
+from Utilities import graph_manager
+from Utilities import dir_manager
 from Core import CQT
 from Core import PeakExtractor
 from Core import FingerprintGenerator
@@ -39,7 +39,7 @@ spectrogram = CQT(hop_length=64)
 peak_extractor = PeakExtractor(maximum_filter_height=25, maximum_filter_width=50)
 fingerprint_generator = FingerprintGenerator()
 # searching for all .mp3 files under specified source dir
-reference_audios = DirManager.find_mp3_files(src_dir=src_dir)
+reference_audios = dir_manager.find_mp3_files(src_dir=src_dir)
 # get r_tree_index
 r_tree_index = RTreeManager.get_rtree_index(rtree_path=r_tree_path)
 # shelf index
@@ -53,7 +53,7 @@ for i in reference_audios[0:10]:
     # audio id
     audio_id = i.split("/")[5].split(".")[0]
     # time series audio data
-    audio_data = AudioManager.load_audio(audio_path=i, sampling_rate=7000)
+    audio_data = audio_manager.load_audio(audio_path=i, sr=7000)
     # transformed audio data using constant q transform
     cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
     # spectral peaks extracted from transformed audio data

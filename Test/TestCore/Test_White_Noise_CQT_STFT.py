@@ -18,9 +18,9 @@
 from Core import CQT
 from Core import STFT
 from Core import PeakExtractor
-from Utilities import AudioManager
-from Utilities import DirManager
-from Utilities import GraphManager
+from Utilities import audio_manager
+from Utilities import dir_manager
+from Utilities import graph_manager
 
 # source directory for reference audios
 ref_dir = "../../../Test_Data/Ref_Audios"
@@ -34,13 +34,13 @@ peak_extractor = PeakExtractor(maximum_filter_width=40, maximum_filter_height=20
 # peak extractor for stft
 peak_extractor_2 = PeakExtractor(maximum_filter_width=150, maximum_filter_height=75)
 # reference audios
-reference_audios = DirManager.find_wav_files(src_dir=ref_dir)
+reference_audios = dir_manager.find_wav_files(src_dir=ref_dir)
 # query audios
-query_audios = DirManager.find_wav_files(src_dir=query_dir)
+query_audios = dir_manager.find_wav_files(src_dir=query_dir)
 # time series audio data of reference audio
-reference_audio_data = AudioManager.load_audio(audio_path=reference_audios[0])
+reference_audio_data = audio_manager.load_audio(audio_path=reference_audios[0])
 # time series audio data of query audio
-query_audio_data = AudioManager.load_audio(audio_path=query_audios[0])
+query_audio_data = audio_manager.load_audio(audio_path=query_audios[0])
 # computing cqt based spectrogram of reference audio
 reference_cqt_spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=reference_audio_data)
 # computing stft based spectrogram of reference audio
@@ -59,13 +59,13 @@ query_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=q
 query_stft_spectral_peaks = peak_extractor_2.extract_spectral_peaks_2(spectrogram=query_stft_spectrogram)
 
 # display spectrogram along with extracted spectral peaks
-GraphManager.display_spectrogram_peaks_2(spectrogram=reference_cqt_spectrogram,
-                                         spectral_peaks_x=reference_cqt_spectral_peaks[1],
-                                         spectral_peaks_y=reference_cqt_spectral_peaks[2],
-                                         spectral_peaks_x_2=query_cqt_spectral_peaks[1],
-                                         spectral_peaks_y_2=query_cqt_spectral_peaks[2])
-GraphManager.display_spectrogram_peaks_2(spectrogram=reference_stft_spectrogram,
-                                         spectral_peaks_x=reference_stft_spectral_peaks[1],
-                                         spectral_peaks_y=reference_stft_spectral_peaks[2],
-                                         spectral_peaks_x_2=query_stft_spectral_peaks[1],
-                                         spectral_peaks_y_2=query_stft_spectral_peaks[2])
+graph_manager.display_spectrogram_peaks_2(spectrogram=reference_cqt_spectrogram,
+                                          spectral_peaks_x=reference_cqt_spectral_peaks[1],
+                                          spectral_peaks_y=reference_cqt_spectral_peaks[2],
+                                          spectral_peaks_x_2=query_cqt_spectral_peaks[1],
+                                          spectral_peaks_y_2=query_cqt_spectral_peaks[2])
+graph_manager.display_spectrogram_peaks_2(spectrogram=reference_stft_spectrogram,
+                                          spectral_peaks_x=reference_stft_spectral_peaks[1],
+                                          spectral_peaks_y=reference_stft_spectral_peaks[2],
+                                          spectral_peaks_x_2=query_stft_spectral_peaks[1],
+                                          spectral_peaks_y_2=query_stft_spectral_peaks[2])

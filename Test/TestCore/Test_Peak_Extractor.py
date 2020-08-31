@@ -17,9 +17,9 @@
 """
 from Core import STFT
 from Core import PeakExtractor
-from Utilities import AudioManager
-from Utilities import DirManager
-from Utilities import GraphManager
+from Utilities import audio_manager
+from Utilities import dir_manager
+from Utilities import graph_manager
 
 # source directory
 src_dir = "../../../Test_Data/Reference_Audios"
@@ -27,15 +27,15 @@ src_dir = "../../../Test_Data/Reference_Audios"
 stft = STFT(hop_length=128)
 peak_extractor = PeakExtractor(maximum_filter_width=20, maximum_filter_height=10)
 # searching for all .mp3 files under given source dir
-mp3_files = DirManager.find_mp3_files(src_dir=src_dir)
+mp3_files = dir_manager.find_mp3_files(src_dir=src_dir)
 # reading time series audio data re-sampled at 7KHz for a given audio portion specified by offset and duration
 # parameters
-audio_data = AudioManager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=3.0)
+audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, duration=3.0)
 # compute spectrogram
 spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
 # extract spectral peaks
 spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
 # display spectrogram along with extracted spectral peaks
-GraphManager.display_spectrogram_peaks(spectrogram=spectrogram,
-                                       spectral_peaks_x=spectral_peaks[1],
-                                       spectral_peaks_y=spectral_peaks[2])
+graph_manager.display_spectrogram_peaks(spectrogram=spectrogram,
+                                        spectral_peaks_x=spectral_peaks[1],
+                                        spectral_peaks_y=spectral_peaks[2])
