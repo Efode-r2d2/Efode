@@ -34,7 +34,7 @@ audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, dura
 # compute spectrogram
 spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
 # extract spectral peaks
-spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
 # display spectrogram along with extracted spectral peaks
 graph_manager.display_spectrogram_peaks(spectrogram=spectrogram,
                                         spectral_peaks_x=spectral_peaks[1],

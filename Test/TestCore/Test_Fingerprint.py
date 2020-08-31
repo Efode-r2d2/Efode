@@ -39,7 +39,7 @@ audio_data = audio_manager.load_audio(audio_path=mp3_files[0], offset=10.0, dura
 print(audio_data)
 spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
 print(spectrogram.shape)
-spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
 print(spectral_peaks)
 audio_fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])
 print(audio_fingerprints)

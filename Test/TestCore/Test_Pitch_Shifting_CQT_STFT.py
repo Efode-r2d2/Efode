@@ -50,13 +50,13 @@ query_cqt_spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=query_audio_d
 # computing stft based spectrogram of reference audio
 query_stft_spectrogram = stft.compute_stft_magnitude_in_db(audio_data=query_audio_data)
 # extract spectral peaks from cqt based spectrogram of reference audio
-reference_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=reference_cqt_spectrogram)
+reference_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=reference_cqt_spectrogram)
 # extract spectral peaks from stft based spectrogram of reference audio
-reference_stft_spectral_peaks = peak_extractor_2.extract_spectral_peaks_2(spectrogram=reference_stft_spectrogram)
+reference_stft_spectral_peaks = peak_extractor_2.extract_spectral_peaks(spectrogram=reference_stft_spectrogram)
 # extracting spectral peaks from cqt based spectrogram of query audio
-query_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=query_cqt_spectrogram)
+query_cqt_spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=query_cqt_spectrogram)
 # extracting spectral peaks from stft based spectrogram of query audio
-query_stft_spectral_peaks = peak_extractor_2.extract_spectral_peaks_2(spectrogram=query_stft_spectrogram)
+query_stft_spectral_peaks = peak_extractor_2.extract_spectral_peaks(spectrogram=query_stft_spectrogram)
 
 # display spectrogram along with extracted spectral peaks
 graph_manager.display_spectrogram_peaks_2(spectrogram=reference_cqt_spectrogram,

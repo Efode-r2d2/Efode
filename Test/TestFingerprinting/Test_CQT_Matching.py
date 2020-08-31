@@ -68,7 +68,7 @@ for i in range(80, 132, 2):
         # computing the spectrogram for a given time series audio data
         spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
         # extracting spectral peaks from a given spectrogram
-        spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+        spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
         # applying geometric hashing based fingerprinting on extracted spectral peaks
         fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])
         # matching fingerprints

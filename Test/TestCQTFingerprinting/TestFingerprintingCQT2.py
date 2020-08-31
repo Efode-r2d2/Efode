@@ -57,7 +57,7 @@ for i in reference_audios[0:10]:
     # transformed audio data using constant q transform
     cqt_in_db = spectrogram.compute_cqt_magnitude_in_db(audio_data=audio_data)
     # spectral peaks extracted from transformed audio data
-    spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=cqt_in_db)
+    spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=cqt_in_db)
 
     fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                                 audio_fingerprints=audio_fingerprints,

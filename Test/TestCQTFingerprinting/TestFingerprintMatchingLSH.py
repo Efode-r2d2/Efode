@@ -57,7 +57,7 @@ for d in range(90, 102, 2):
             start = time.time()
             spectrogram = cqt.compute_cqt_magnitude_in_db(audio_data=audio_data)
             # extracting spectral peaks
-            spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+            spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
             # generating fingerprints
             fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                                         audio_fingerprints=audio_fingerprints,

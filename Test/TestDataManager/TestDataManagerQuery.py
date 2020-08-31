@@ -30,7 +30,7 @@ for i in query_audios:
 
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
     # extracting spectral peaks from STFT based spectrogram
-    spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+    spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate quad based fingerprints
 
     audio_fingerprints = fingerprint_generator.__generate_fingerprints__(spectral_peaks=spectral_peaks[0],

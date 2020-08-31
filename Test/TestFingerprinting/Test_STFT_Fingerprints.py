@@ -76,7 +76,7 @@ for i in reference_audios:
     audio_id = i.split("/")[5].split(".")[0]
     audio_data = audio_manager.load_audio(audio_path=i, sr=SAMPLING_RATE)
     spectrogram = stft.compute_stft_magnitude_in_db(audio_data=audio_data)
-    spectral_peaks = peak_extractor.extract_spectral_peaks_2(spectrogram=spectrogram)
+    spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     audio_fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])
     fingerprint_manager.__store_fingerprints__(audio_fingerprints=audio_fingerprints, audio_id=audio_id)
     print("Done Fingerprinting", audio_id)

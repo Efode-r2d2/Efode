@@ -1,55 +1,53 @@
-import numpy as np
 from operator import itemgetter
-from skimage.feature import peak_local_max
+import numpy as np
 from scipy.ndimage import maximum_filter
 from scipy.ndimage import minimum_filter
 
 
 class PeakExtractor(object):
-    def __init__(self, filter_dim=10, minimum_amp_in_db=-60, num_peaks=60
-                 , maximum_filter_height=75, minimum_filter_height=3,
+    """
+    A class to extract spectral peaks given spectrogram of an audio.
+
+    Attributes:
+        maximum_filter_width (int): Width of maximum filter.
+        maximum_filter_height (int): Height of maximum filter.
+        minimum_filter_width (int): Width of minimum filter.
+        minimum_filter_height (int): Height of minimum filter.
+
+    """
+    def __init__(self, maximum_filter_height=75, minimum_filter_height=3,
                  maximum_filter_width=150, minimum_filter_width=3):
         """
+        A constructor for PeakExtractor class.
 
-        :param filter_dim:
-        :param minimum_amp_in_db:
-        :param num_peaks:
-        :param maximum_filter_height:
-        :param minimum_filter_height:
-        :param maximum_filter_width:
-        :param minimum_filter_width:
+        Parameters:
+            maximum_filter_width (int): Width of maximum filter.
+            maximum_filter_height (int): Height of maximum filter.
+            minimum_filter_width (int): Width of minimum filter.
+            minimum_filter_height (int): Height of minimum filter.
+
         """
-        self.filter_dim = filter_dim
-        self.minimum_amp_in_db = minimum_amp_in_db
-        self.num_peaks = num_peaks
-        self.spectral_peaks = None
-        self.time_indices = None
-        self.frequency_indices = None
         self.maximum_filter_height = maximum_filter_height
         self.maximum_filter_width = maximum_filter_width
         self.minimum_filter_height = minimum_filter_height
         self.minimum_filter_width = minimum_filter_width
 
-    def extract_spectral_peaks_1(self, spectrogram):
+    def extract_spectral_peaks(self, spectrogram):
         """
+        A method to extract spectral peaks given a spectrogram of an audio. In this method
+        a maximum filter is applied to extract all local maxima's with in a given filter
+        size and a minimum filter with a filter dimensions smaller than the maximum filter
+        is applied to extract all the local minima's. Finally spectral peaks are computed by
+        subtracting the results of the minimum filter from the results of the maximum filter.
 
-        :param spectrogram:
-        :return:
-        """
-        local_max_values = peak_local_max(image=spectrogram,
-                                          min_distance=self.filter_dim,
-                                          indices=False,
-                                          threshold_abs=self.minimum_amp_in_db)
-        self.frequency_indices, self.time_indices = np.where(local_max_values)
-        self.spectral_peaks = list(zip(self.time_indices, self.frequency_indices))
-        self.spectral_peaks.sort(key=itemgetter(0))
-        return self.spectral_peaks, self.time_indices, self.frequency_indices
+        Parameters:
+            spectrogram (numpy.ndarray): Time-frequency representation of an audio.
 
-    def extract_spectral_peaks_2(self, spectrogram):
-        """
+        Returns:
+            List : List of spectral peaks.
+            List : List of time indices.
+            List : List of frequency indices.
 
-        :param spectrogram:
-        :return:
         """
         # computing local maximum points with the specified maximum filter dimension
         local_max_values = maximum_filter(input=spectrogram, size=(self.maximum_filter_height,
