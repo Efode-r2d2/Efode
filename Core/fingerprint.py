@@ -12,12 +12,25 @@ class Fingerprint(object):
         target_zone_width (int): Width of the target zone.
         target_zone_center (int): Center of the target zone from the root peak called P1.
         number_of_triplets_per_second (int): Number of strong triplets per second.
-        tolerance (int): Maximum allowed tempo and pitch modifications.
+        tolerance (float): Maximum allowed tempo and pitch modifications.
+        min_frame_number (int): The minimum frame number to be included in the target zone.
+        max_frame_number (int): The maximum frame number to be included in the target zone.
 
     """
 
     def __init__(self, frames_per_second=219, target_zone_width=1, target_zone_center=4,
                  number_of_triplets_per_second=9, tolerance=0.31):
+        """
+        A constructor for Fingerprint Class.
+
+        Parameters:
+            frames_per_second (int): Number of frames per second.
+            target_zone_width (int): Width of the target zone.
+            target_zone_center (int): Center of the target zone from the root peak P1.
+            number_of_triplets_per_second (int): Number of strong triplets per second.
+            tolerance (float): Maximum allowed modification both along tempo and pitch axis.
+
+        """
         self.frames_per_second = frames_per_second
         self.target_zone_width = target_zone_width
         self.target_zone_center = target_zone_center
@@ -29,12 +42,33 @@ class Fingerprint(object):
                 1 - self.tolerance)
 
     def generate_fingerprints(self, spectral_peaks, spectrogram):
+        """
+        A method to generate audio fingerprints based on the association of three spectral peaks.
+
+        Parameters:
+            spectral_peaks (List): List of spectral peaks extracted from spectrogram of an audio.
+            spectrogram (numpy.ndarray): Time-frequency representation of an audio.
+
+        Returns:
+            List : List of audio fingerprinting.
+
+        """
         valid_triplets = self.__validate_triplets(spectral_peaks=spectral_peaks)
         strong_triplets = self.__n_strongest_triplets(spectrogram=spectrogram, valid_triplets=valid_triplets)
         audio_fingerprints = self.__geometric_hash(strong_triplets=strong_triplets)
         return audio_fingerprints
 
     def __validate_triplets(self, spectral_peaks):
+        """
+        A method to validate triplets based on a pre-defined conditions.
+
+        Parameters:
+            spectral_peaks (List): List of spectral peaks extracted from STFT based audio spectrogram.
+
+        Returns:
+            List : List of valid triplets.
+
+        """
         valid_triplets = list()
         for i in spectral_peaks:
             # a target zone for a given spectral peak
@@ -53,7 +87,14 @@ class Fingerprint(object):
 
     def __find_partitions(self, valid_triplets):
         """
-        Returns list of indices where partitions of 250 (1 second) are
+        A method to partition valid triplets into one second duration.
+
+        Parameters:
+            valid_triplets (List): List of valid triplets.
+
+        Returns:
+            List : List of triplets chunked into one second duration.
+
         """
         b_l = bisect_left
         last_x = valid_triplets[-1][0][0]
@@ -66,8 +107,15 @@ class Fingerprint(object):
 
     def __n_strongest_triplets(self, spectrogram, valid_triplets):
         """
-        Returns list of n strongest quads in each 1 second partition
-        Strongest is calculated by magnitudes of C and D in quad
+        A method to select only specified number of strong triplets per a second of audio.
+
+        Parameters:
+            spectrogram (numpy.ndarray): Time-frequency representation of an audio.
+            valid_triplets (List): list of valid triplets.
+
+        Returns:
+            List : list of specified number of triplets per second of audio.
+
         """
         strongest = []
         partitions = self.__find_partitions(valid_triplets=valid_triplets)
@@ -79,6 +127,16 @@ class Fingerprint(object):
         return strongest
 
     def __geometric_hash(self, strong_triplets):
+        """
+        A method to generate hash of a triplet using a technique called geometric hashing.
+
+        Parameters:
+            strong_triplets (List): List of strong triplets.
+
+        Returns:
+            List : List of hashes of triplets along with their raw data.
+
+        """
         audio_fingerprints = list()
         for i in strong_triplets:
             p1 = i[0]
