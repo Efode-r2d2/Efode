@@ -70,7 +70,7 @@ for i in range(80, 132, 2):
         # extracting spectral peaks from a given spectrogram
         spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
         # applying geometric hashing based fingerprinting on extracted spectral peaks
-        fingerprints = fingerprint.__generate_fingerprints__(spectral_peaks=spectral_peaks[0])
+        fingerprints = fingerprint.generate_fingerprints(spectral_peaks=spectral_peaks[0])
         # matching fingerprints
         matches_in_bins = MatchFingerprints.match_fingerprints(rtree_index=r_tree_index, raw_data_index=raw_data_index,
                                                                fingerprints=fingerprints, tolerance=TOLERANCE)

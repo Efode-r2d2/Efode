@@ -33,8 +33,8 @@ for i in query_audios:
     spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate quad based fingerprints
 
-    audio_fingerprints = fingerprint_generator.__generate_fingerprints__(spectral_peaks=spectral_peaks[0],
-                                                                         spectrogram=spectrogram, n=100)
+    audio_fingerprints = fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
+                                                                     spectrogram=spectrogram, n=100)
     # query matches
     start = time.time()
     data_manager.__query__(audio_fingerprints=audio_fingerprints, spectral_peaks=spectral_peaks[0], vThreshold=0.3)
