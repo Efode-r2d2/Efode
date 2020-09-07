@@ -31,5 +31,5 @@ for i in reference_audios[0:2]:
     audio_fingerprints = fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                                                      spectrogram=spectrogram)
     # storing fingerprints
-    data_manager.store(audio_fingerprints=audio_fingerprints,audio_title=audio_title)
+    data_manager.store(audio_fingerprints=audio_fingerprints, audio_title=audio_title)
     print("Done Fingerprinting ", audio_title)

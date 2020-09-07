@@ -82,7 +82,7 @@ class Fingerprint(object):
                 p3 = j[0]
                 p2 = j[1]
                 if p1[1] < p3[1] < p2[1]:
-                    valid_triplets.append((p1,) + i)
+                    valid_triplets.append((p1,) + j)
         return valid_triplets
 
     def __find_partitions(self, valid_triplets):

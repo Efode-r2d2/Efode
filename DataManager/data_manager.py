@@ -64,7 +64,7 @@ def record_exists(cursor, audio_title):
     """
     cursor.execute("""SELECT id
                            FROM Audios
-                          WHERE title = ?""", (audio_title,))
+                          WHERE audio_title = ?""", (audio_title,))
     record_id = cursor.fetchone()
     if record_id is None:
         return False
@@ -114,14 +114,14 @@ def store_triplet(cursor, triplet, audio_id):
     """
     hash_id = cursor.lastrowid
     values = (hash_id, audio_id, int(triplet[0]), int(triplet[1]), int(triplet[2]), int(triplet[3]))
-    cursor.execute("""INSERT INTO Quads
+    cursor.execute("""INSERT INTO Triplets
                          VALUES (?,?,?,?,?,?)""", values)
 
 
 def __lookup_triplets__(conn, hash_ids):
     cursor = conn.cursor()
-    cursor.execute("""SELECT Ax,Ay,Bx,By,recordid FROM Quads
-                          WHERE hashid=?""", hash_ids)
+    cursor.execute("""SELECT Ax,Ay,Bx,By,record_id FROM Quads
+                          WHERE hash_id=?""", hash_ids)
     row = cursor.fetchone()
     cursor.close()
     return [row[0], row[1], row[2], row[3]], row[4]
