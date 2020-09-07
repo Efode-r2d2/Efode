@@ -37,5 +37,5 @@ for i in query_audios:
                                                                      spectrogram=spectrogram, n=100)
     # query matches
     start = time.time()
-    data_manager.__query__(audio_fingerprints=audio_fingerprints, spectral_peaks=spectral_peaks[0], vThreshold=0.3)
+    data_manager.query_audio(audio_fingerprints=audio_fingerprints, spectral_peaks=spectral_peaks[0], vThreshold=0.3)
     print(time.time()-start)

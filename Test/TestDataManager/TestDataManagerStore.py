@@ -16,10 +16,10 @@ peak_extractor = PeakExtractor(maximum_filter_width=150, maximum_filter_height=7
                                minimum_filter_width=3, minimum_filter_height=3)
 # Fingerprint Generator object to generate audio fingerprints given spectral peaks extracted from the spectrogram
 fingerprint_generator = Fingerprint(frames_per_second=219, target_zone_center=4, target_zone_width=2,
-                                    number_of_triplets_per_second=9, tolerance=0.31)
+                                    number_of_triplets_per_second=9, tolerance=0.0)
 # Data manager object
 data_manager = DataManager("../../../Databases/Efode_Test_1.db")
-for i in reference_audios[0:2]:
+for i in reference_audios:
     audio_title = i.split("/")[5].split(".")[0]
     # loading time series audio data of one of reference audio
     audio_data = audio_manager.load_audio(audio_path=i, sr=7000)

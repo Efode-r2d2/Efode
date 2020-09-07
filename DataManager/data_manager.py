@@ -27,11 +27,11 @@ def create_tables(conn):
                 CREATE TABLE
                 IF NOT EXISTS Triplets(
                     hash_id INTEGER PRIMARY KEY,
-                    record_id INTEGER,
-                    Ax INTEGER, Ay INTEGER,
-                    Bx INTEGER, By INTEGER,
+                    audio_id INTEGER,
+                    P1x INTEGER, P1y INTEGER,
+                    P2x INTEGER, P2y INTEGER,
                     FOREIGN KEY(hash_id) REFERENCES Hashes(id),
-                    FOREIGN KEY(record_id) REFERENCES Records(id));""")
+                    FOREIGN KEY(audio_id) REFERENCES Audios(id));""")
 
 
 def store_audio(cursor, audio_title):
@@ -104,6 +104,24 @@ def radius_nn(cursor, geo_hash, e=0.01):
                     geo_hash[1] - e, geo_hash[1] + e))
 
 
+def find_hash(cursor, hash_value, e=0.01):
+    """
+    A function to retrieve all the matching hashes with in the range of e.
+
+    Parameters:
+        cursor : The current cursor of the database.
+        hash_value (tuple): A hash extracted from a query audio.
+        e (float): A look up radius for the r-tree.
+
+    """
+    cursor.execute("""SELECT Triplets.P1x,Triplets.P1y,Triplets.P2x,Triplets.P2y,Triplets.audio_id FROM Triplets INNER JOIN Hashes
+                    ON Triplets.hash_id = Hashes.id
+                  WHERE Hashes.minNewP3x >= ? AND Hashes.maxNewP3x <= ?
+                    AND Hashes.minNewP3y >= ? AND Hashes.maxNewP3y <= ?""",
+                   (hash_value[0] - e, hash_value[0] + e,
+                    hash_value[1] - e, hash_value[1] + e))
+
+
 def store_triplet(cursor, triplet, audio_id):
     """
 
@@ -118,16 +136,16 @@ def store_triplet(cursor, triplet, audio_id):
                          VALUES (?,?,?,?,?,?)""", values)
 
 
-def __lookup_triplets__(conn, hash_ids):
+def lookup_triplets(conn, hash_ids):
     cursor = conn.cursor()
-    cursor.execute("""SELECT Ax,Ay,Bx,By,record_id FROM Quads
+    cursor.execute("""SELECT P1x,P1y,P2x,P2y,audio_id FROM Triplets
                           WHERE hash_id=?""", hash_ids)
     row = cursor.fetchone()
     cursor.close()
     return [row[0], row[1], row[2], row[3]], row[4]
 
 
-def __bin_times__(l, binwidth=20, ts=4):
+def bin_times(l, bin_width=20, ts=4):
     """
     Takes list of rough offsets and bins them in time increments of
     binwidth. These offsets are stored in a dictionary of
@@ -136,73 +154,45 @@ def __bin_times__(l, binwidth=20, ts=4):
     """
     d = defaultdict(list)
     for rough_offset in l:
-        div = rough_offset[0] / binwidth
-        binname = int(math.floor(div) * binwidth)
+        div = rough_offset[0] / bin_width
+        binname = int(math.floor(div) * bin_width)
         d[binname].append((rough_offset[1][0], rough_offset[1][1]))
     return {k: v for k, v in d.items() if len(v) >= ts}
 
 
-def __outlier_removal__(d):
-    """
-    Calculates mean/std. dev. for sTime/sFreq values,
-    then removes any outliers (defined as mean +/- 2 * stdv).
-    Returns list of final means.
-    """
-    means = np.mean(d, axis=0)
-    stds = np.std(d, axis=0)
-    d = [v for v in d if
-         (means[0] - 2 * stds[0] <= v[0] <= means[0] + 2 * stds[0]) and
-         (means[1] - 2 * stds[1] <= v[1] <= means[1] + 2 * stds[1])]
-    return d
-
-
-def __scales__(d):
-    """
-    Receives dictionary of {binned time : [scale factors]}
-    Performs variance-based outlier removal on these scales. If 4 or more
-    matches remain after outliers are removed, a list with form
-    [(rough offset, num matches, scale averages)]] is created. This result
-    is sorted by # of matches in descending order and returned.
-    """
-    o_rm = {k: __outlier_removal__(v) for k, v in d.items()}
-    res = [(i[0], len(i[1]), np.mean(i[1], axis=0))
-           for i in o_rm.items() if len(i[1]) >= 4]
-    sorted_mc = sorted(res, key=operator.itemgetter(1), reverse=True)
-    return sorted_mc
-
-
-def __store_peaks__(curosr, spectral_peaks, record_id):
-    """
-    Stores peaks from reference fingerprint
-    """
-    for i in spectral_peaks:
-        curosr.execute("""INSERT INTO Peaks
-                     VALUES (?,?,?)""", (record_id, int(i[0]), int(i[1])))
-
-
-def __filter_candidates__(conn, cursor, query_quad, filtered, tolerance=0.31, e_fine=1.8):
-    for hash_ids in cursor:
-        reference_quad, record_id = __lookup_triplets__(conn, hash_ids)
+def filter_candidates(cursor, query_triplet, filtered, tolerance=0.31, e_fine=1.8):
+    for reference_triplet in cursor:
         # Rough pitch coherence:
         #   1/(1+e) <= queAy/canAy <= 1/(1-e)
-        if not 1 / (1 + tolerance) <= query_quad[1] / reference_quad[1] <= 1 / (1 - tolerance):
+        if not 1 / (1 + tolerance) <= query_triplet[1] / reference_triplet[1] <= 1 / (1 - tolerance):
             continue
         # X transformation tolerance check:
         #   sTime = (queBx-queAx)/(canBx-canAx)
-        sTime = (query_quad[2] - query_quad[0]) / (reference_quad[2] - reference_quad[0])
+        sTime = (query_triplet[2] - query_triplet[0]) / (reference_triplet[2] - reference_triplet[0])
         if not 1 / (1 + tolerance) <= sTime <= 1 / (1 - tolerance):
             continue
         # Y transformation tolerance check:
         #   sFreq = (queBy-queAy)/(canBy-canAy)
-        sFreq = (query_quad[3] - query_quad[1]) / (reference_quad[3] - reference_quad[1])
+        sFreq = (query_triplet[3] - query_triplet[1]) / (reference_triplet[3] - reference_triplet[1])
         if not 1 / (1 + tolerance) <= sFreq <= 1 / (1 - tolerance):
             continue
         # Fine pitch coherence:
         #   |queAy-canAy*sFreq| <= eFine
-        if not abs(query_quad[1] - (reference_quad[1] * sFreq)) <= e_fine:
+        if not abs(query_triplet[1] - (reference_triplet[1] * sFreq)) <= e_fine:
             continue
-        offset = reference_quad[0] - (query_quad[0] * sTime)
-        filtered[record_id].append((offset, (sTime, sFreq)))
+        offset = reference_triplet[0] - (query_triplet[0] * sTime)
+        filtered[reference_triplet[4]].append((offset, (sTime, sFreq)))
+
+
+def lookup_record(cursor, audio_id):
+    """
+    Returns title of given audio_id
+    """
+    cursor.execute("""SELECT audio_title
+                   FROM Audios
+                  WHERE id = ?""", (audio_id,))
+    title = cursor.fetchone()
+    return title[0]
 
 
 class DataManager(object):
@@ -248,87 +238,42 @@ class DataManager(object):
         conn.commit()
         conn.close()
 
-    def __query__(self, audio_fingerprints):
-        match_candidates = self.__find_match_candidates__(audio_fingerprints)
+    def query_audio(self, audio_fingerprints):
+        """
+        A method to query for a matching audio given fingerprints of a query audio.
+
+        Parameters:
+            audio_fingerprints (List): List of fingerprints extracted from query audio.
+
+        Returns:
+
+        """
+        match_candidates = self.find_matches(audio_fingerprints)
         conn = sqlite3.connect(self.db_path)
 
         cursor = conn.cursor()
-        if len(match_candidates) > 0 and match_candidates[0].num_matches > 5:
-            print(self._lookup_record(c=cursor, recordid=match_candidates[0].recordid), match_candidates[0])
+        if len(match_candidates) > 0 and match_candidates[0][2] > 5:
+            audio_id = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
+            cursor.close()
+            conn.close()
+            return audio_id, match_candidates[0][2]
         else:
-            print("No Match Found")
-        cursor.close()
-        conn.close()
+            return "No Match", 0
 
-    def __find_match_candidates__(self, audio_fingerprints):
+    def find_matches(self, audio_fingerprints):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         filtered = defaultdict(list)
         for i in audio_fingerprints:
-            radius_nn(cursor, i[0])
+            find_hash(cursor=cursor, hash_value=i[0])
             with np.errstate(divide='ignore', invalid='ignore'):
-                __filter_candidates__(conn, cursor, i[1], filtered)
-        binned = {k: __bin_times__(v) for k, v in filtered.items()}
-        results = {k: __scales__(v)
-                   for k, v in binned.items() if len(v) >= 4}
-        match_candidates = [self.MatchCandidate(k, a[0], a[1], a[2][0], a[2][1])
-                            for k, v in results.items() for a in v]
+                filter_candidates(cursor=cursor, query_triplet=i[1], filtered=filtered)
+        binned = {k: bin_times(v) for k, v in filtered.items()}
+        results = list()
+        for k, v in binned.items():
+            for j, m in v.items():
+                results.append([k, j, len(m)])
+        sorted_results = sorted(results, key=operator.itemgetter(2), reverse=True)
         cursor.close()
         conn.close()
-        sorted_match = sorted(match_candidates, key=operator.itemgetter(2), reverse=True)
-        return sorted_match
-
-    def _validate_match(self, spectral_peaks, cursor, match_candidate):
-        """
-        """
-        rPeaks = self._lookup_peak_range(cursor, match_candidate.recordid, match_candidate.offset)
-        vScore = self._verify_peaks(match_candidate, rPeaks, spectral_peaks)
-        return self.Match(self._lookup_record(cursor, match_candidate.recordid), match_candidate.offset, vScore)
-
-    def _lookup_peak_range(self, c, recordid, offset, e=3750):
-        """
-        Queries Peaks table for peaks of given recordid that are within
-        3750 samples (15s) of the estimated offset value.
-        """
-        data = (offset, offset + e, recordid)
-        c.execute("""SELECT X, Y
-                       FROM Peaks
-                      WHERE X >= ? AND X <= ?
-                        AND recordid = ?""", data)
-        return [self.Peak(p[0], p[1]) for p in c.fetchall()]
-
-    def _verify_peaks(self, mc, rPeaks, qPeaks, eX=18, eY=12):
-        """
-        Checks for presence of a given set of reference peaks in the
-        query fingerprint's list of peaks according to time and
-        frequency boundaries (eX and eY). Each reference peak is adjusted
-        according to estimated sFreq/sTime from candidate filtering
-        stage.
-        Returns: validation score (num. valid peaks / total peaks)
-        """
-        validated = 0
-        for rPeak in rPeaks:
-            rPeak = (rPeak.x - mc.offset, rPeak.y)
-            rPeakScaled = self.Peak(rPeak[0] / mc.sFreq, rPeak[1] / mc.sTime)
-            lBound = bisect_left(qPeaks, (rPeakScaled.x - eX, len(qPeaks)))
-            rBound = bisect_right(qPeaks, (rPeakScaled.x + eX, len(qPeaks)))
-            for i in range(lBound, rBound):
-                if not rPeakScaled.y - eY <= qPeaks[i][1] <= rPeakScaled.y + eY:
-                    continue
-                else:
-                    validated += 1
-        if len(rPeaks) == 0:
-            vScore = 0.0
-        else:
-            vScore = (float(validated) / len(rPeaks))
-        return vScore
-
-    def _lookup_record(self, c, recordid):
-        """
-        Returns title of given recordid
-        """
-        c.execute("""SELECT title
-                       FROM Records
-                      WHERE id = ?""", (recordid,))
-        title = c.fetchone()
-        return title[0]
+        return sorted_results
