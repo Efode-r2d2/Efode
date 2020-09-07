@@ -51,6 +51,17 @@ def store_audio(cursor, audio_title):
 
 
 def record_exists(cursor, audio_title):
+    """
+    A function to check whether a given audio title exist in a database or not.
+
+    Parameters:
+        cursor : current cursor of the database.
+        audio_title (String): title of the audio.
+
+    Returns:
+        Boolean: True if the given audio title exist, False if the given audio title doesn't exist.
+
+    """
     cursor.execute("""SELECT id
                            FROM Audios
                           WHERE title = ?""", (audio_title,))
@@ -62,27 +73,47 @@ def record_exists(cursor, audio_title):
         return True
 
 
-def __store_hash__(cursor, hash):
+def store_hash(cursor, geo_hash):
+    """
+    A function to store triple point based geometric hashes into the database.
+
+    Parameters:
+        cursor : the current cursor of the database.
+        geo_hash (List): geometric hash computed using the association of three spectral peaks.
+
+    """
     cursor.execute("""INSERT INTO Hashes
                          VALUES (null,?,?,?,?)""",
-                   (hash[0], hash[0], hash[1], hash[1]))
+                   (geo_hash[0], geo_hash[0], geo_hash[1], geo_hash[1]))
 
 
-def __radius_nn__(cursor, hash, e=0.01):
+def radius_nn(cursor, geo_hash, e=0.01):
     """
-    Epsilon (e) neighbor search for a given hash. Matching hash ids
-    can be retrieved from the cursor.
+    A function to find nearest neighbors for a given geometric hash.
+
+    Parameters:
+        cursor : the current cursor of the database.
+        geo_hash (List) : geometric hash computed using the association of three spectral peaks.
+        e : maximum allowed range for nearest neighbor search.
+
     """
     cursor.execute("""SELECT id FROM Hashes
                   WHERE minNewP3x >= ? AND maxNewP3x <= ?
                     AND minNewP3y >= ? AND maxNewP3y <= ?""",
-                   (hash[0] - e, hash[0] + e,
-                    hash[1] - e, hash[1] + e))
+                   (geo_hash[0] - e, geo_hash[0] + e,
+                    geo_hash[1] - e, geo_hash[1] + e))
 
 
-def __store_triplet__(cursor, triplet, record_id):
+def store_triplet(cursor, triplet, audio_id):
+    """
+
+    :param cursor:
+    :param triplet:
+    :param audio_id:
+    :return:
+    """
     hash_id = cursor.lastrowid
-    values = (hash_id, record_id, int(triplet[0]), int(triplet[1]), int(triplet[2]), int(triplet[3]))
+    values = (hash_id, audio_id, int(triplet[0]), int(triplet[1]), int(triplet[2]), int(triplet[3]))
     cursor.execute("""INSERT INTO Quads
                          VALUES (?,?,?,?,?,?)""", values)
 
@@ -175,6 +206,9 @@ def __filter_candidates__(conn, cursor, query_quad, filtered, tolerance=0.31, e_
 
 
 class DataManager(object):
+    """
+
+    """
 
     def __init__(self, db_path):
         self.db_path = db_path
@@ -196,8 +230,8 @@ class DataManager(object):
             if not record_exists(cursor=cursor, audio_title=audio_title):
                 record_id = store_audio(cursor=cursor, audio_title=audio_title)
                 for i in audio_fingerprints:
-                    __store_hash__(cursor=cursor, hash=i[0])
-                    __store_triplet__(cursor=cursor, triplet=i[1], record_id=record_id)
+                    store_hash(cursor=cursor, geo_hash=i[0])
+                    store_triplet(cursor=cursor, triplet=i[1], audio_id=record_id)
         conn.commit()
         conn.close()
 
@@ -218,7 +252,7 @@ class DataManager(object):
         cursor = conn.cursor()
         filtered = defaultdict(list)
         for i in audio_fingerprints:
-            __radius_nn__(cursor, i[0])
+            radius_nn(cursor, i[0])
             with np.errstate(divide='ignore', invalid='ignore'):
                 __filter_candidates__(conn, cursor, i[1], filtered)
         binned = {k: __bin_times__(v) for k, v in filtered.items()}
