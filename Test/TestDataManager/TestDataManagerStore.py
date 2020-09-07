@@ -11,12 +11,14 @@ src_dir = "../../../Test_Data/Reference_Audios/"
 reference_audios = dir_manager.find_mp3_files(src_dir=src_dir)
 # an object for Short Time Fourier Transform
 stft = STFT(n_fft=1024, hop_length=32, sr=7000)
-# an object to extract spectral peaks from STFT based spectrogram
-peak_extractor = PeakExtractor(maximum_filter_width=150, maximum_filter_height=75)
-# an object to generate fingerprints using the associtation of four spectral peaks
-fingerprint_generator = Fingerprint(target_zone_width=1, target_zone_center=2, tolerance=0.31)
+# Peak Extraction object to extract spectral peaks from STFT based audio spectrogram.
+peak_extractor = PeakExtractor(maximum_filter_width=150, maximum_filter_height=75,
+                               minimum_filter_width=3, minimum_filter_height=3)
+# Fingerprint Generator object to generate audio fingerprints given spectral peaks extracted from the spectrogram
+fingerprint_generator = Fingerprint(frames_per_second=219, target_zone_center=4, target_zone_width=2,
+                                    number_of_triplets_per_second=9, tolerance=0.31)
 # Data manager object
-data_manager = DataManager("../../../Hashes/Efode/Efode4.db")
+data_manager = DataManager("../../../Databases/Efode_Test_1.db")
 for i in reference_audios[0:2]:
     audio_title = i.split("/")[5].split(".")[0]
     # loading time series audio data of one of reference audio
@@ -27,7 +29,7 @@ for i in reference_audios[0:2]:
     spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
     # generate fingerprints using the association of four spectral peaks
     audio_fingerprints = fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
-                                                                     spectrogram=spectrogram, n=40)
+                                                                     spectrogram=spectrogram)
     # storing fingerprints
-    data_manager.store(audio_fingerprints=audio_fingerprints, spectral_peaks=spectral_peaks[0], audio_title=audio_title)
+    data_manager.store(audio_fingerprints=audio_fingerprints,audio_title=audio_title)
     print("Done Fingerprinting ", audio_title)

@@ -207,24 +207,37 @@ def __filter_candidates__(conn, cursor, query_quad, filtered, tolerance=0.31, e_
 
 class DataManager(object):
     """
+    A class to manager storing audio fingerprints to a reference fingerprint database and query for
+    a matching audio given audio fingerprints extracted from the query audio.
+
+    Attributes:
+        db_path (String): A path for the reference audio fingerprints database.
 
     """
 
     def __init__(self, db_path):
+        """
+        A constructor for DataManager class.
+
+        Parameters:
+            db_path (String): a path to reference audio fingerprints database.
+
+        """
         self.db_path = db_path
         with sqlite3.connect(self.db_path) as conn:
             create_tables(conn)
-        self._create_named_tuples()
         conn.close()
 
-    def _create_named_tuples(self):
-        self.Peak = namedtuple('Peak', ['x', 'y'])
-        self.Quad = namedtuple('Quad', ['A', 'C', 'D', 'B'])
-        mcNames = ['recordid', 'offset', 'num_matches', 'sTime', 'sFreq']
-        self.MatchCandidate = namedtuple('MatchCandidate', mcNames)
-        self.Match = namedtuple('Match', ['record', 'offset', 'vScore'])
-
     def store(self, audio_fingerprints, audio_title):
+        """
+        A method to store reference audio fingerprints along with the audio title to the
+        reference audio fingerprints database.
+
+        Parameters:
+            audio_fingerprints (List): List of reference audio fingerprints.
+            audio_title (String): Title of the audio.
+
+        """
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             if not record_exists(cursor=cursor, audio_title=audio_title):
@@ -235,7 +248,7 @@ class DataManager(object):
         conn.commit()
         conn.close()
 
-    def __query__(self, audio_fingerprints, spectral_peaks, vThreshold=0.5):
+    def __query__(self, audio_fingerprints):
         match_candidates = self.__find_match_candidates__(audio_fingerprints)
         conn = sqlite3.connect(self.db_path)
 
