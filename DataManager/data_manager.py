@@ -5,19 +5,15 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict, namedtuple
 import operator
 
-"""
-    Creating a database consisting of four tables:
-    1. Hashes Table: an R*Tree based virtual tables used to store hash values
-    extracted using the association of four spectral peaks.
-    2. Records Table: a table used to store required metadata's of a given song. 
-    In this case we only store the title of the song as a metadata. 
-    3. Quads Table: a table used to store raw data associated with each quad.
-    4. Peaks Table: a table used to store raw information's associated with 
-    each spectral peaks
-"""
 
+def create_tables(conn):
+    """
+    A function to create required tables to store hashes, audio information and raw data of each triplet.
 
-def __create_tables__(conn):
+    Parameters:
+        conn (String): connection string to the sqlite database.
+
+    """
     conn.executescript("""
                 CREATE VIRTUAL TABLE
                 IF NOT EXISTS Hashes USING rtree(
@@ -25,34 +21,39 @@ def __create_tables__(conn):
                     minNewP3x, maxNewP3x,
                     minNewP3y, maxNewP3y);
                 CREATE TABLE
-                IF NOT EXISTS Records(
+                IF NOT EXISTS Audios(
                     id INTEGER PRIMARY KEY,
-                    title TEXT);
+                    audio_title TEXT);
                 CREATE TABLE
-                IF NOT EXISTS Quads(
-                    hashid INTEGER PRIMARY KEY,
-                    recordid INTEGER,
+                IF NOT EXISTS Triplets(
+                    hash_id INTEGER PRIMARY KEY,
+                    record_id INTEGER,
                     Ax INTEGER, Ay INTEGER,
                     Bx INTEGER, By INTEGER,
-                    FOREIGN KEY(hashid) REFERENCES Hashes(id),
-                    FOREIGN KEY(recordid) REFERENCES Records(id));
-                CREATE TABLE
-                IF NOT EXISTS Peaks(
-                    recordid INTEGER, X INTEGER, Y INTEGER,
-                    PRIMARY KEY(recordid, X, Y),
-                    FOREIGN KEY(recordid) REFERENCES Records(id));""")
+                    FOREIGN KEY(hash_id) REFERENCES Hashes(id),
+                    FOREIGN KEY(record_id) REFERENCES Records(id));""")
 
 
-def __store_record__(cursor, title):
-    cursor.execute("""INSERT INTO Records
-                         VALUES (null,?)""", (title,))
+def store_audio(cursor, audio_title):
+    """
+    A function to store audio information.
+
+    Parameters:
+        cursor : current cursor of the database.
+        audio_title (String): Title of the audio.
+    Returns:
+        int : the id of the last row.
+
+    """
+    cursor.execute("""INSERT INTO Audios
+                         VALUES (null,?)""", (audio_title,))
     return cursor.lastrowid
 
 
-def __record_exists__(cursor, title):
+def record_exists(cursor, audio_title):
     cursor.execute("""SELECT id
-                           FROM Records
-                          WHERE title = ?""", (title,))
+                           FROM Audios
+                          WHERE title = ?""", (audio_title,))
     record_id = cursor.fetchone()
     if record_id is None:
         return False
@@ -174,10 +175,11 @@ def __filter_candidates__(conn, cursor, query_quad, filtered, tolerance=0.31, e_
 
 
 class DataManager(object):
+
     def __init__(self, db_path):
         self.db_path = db_path
         with sqlite3.connect(self.db_path) as conn:
-            __create_tables__(conn)
+            create_tables(conn)
         self._create_named_tuples()
         conn.close()
 
@@ -188,13 +190,12 @@ class DataManager(object):
         self.MatchCandidate = namedtuple('MatchCandidate', mcNames)
         self.Match = namedtuple('Match', ['record', 'offset', 'vScore'])
 
-    def __store__(self, fingerprints, spectral_peaks, title):
+    def store(self, audio_fingerprints, audio_title):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            if not __record_exists__(cursor=cursor, title=title):
-                record_id = __store_record__(cursor=cursor, title=title)
-                # __store_peaks__(curosr=cursor, spectral_peaks=spectral_peaks, record_id=record_id)
-                for i in fingerprints:
+            if not record_exists(cursor=cursor, audio_title=audio_title):
+                record_id = store_audio(cursor=cursor, audio_title=audio_title)
+                for i in audio_fingerprints:
                     __store_hash__(cursor=cursor, hash=i[0])
                     __store_triplet__(cursor=cursor, triplet=i[1], record_id=record_id)
         conn.commit()
@@ -209,11 +210,6 @@ class DataManager(object):
             print(self._lookup_record(c=cursor, recordid=match_candidates[0].recordid), match_candidates[0])
         else:
             print("No Match Found")
-        '''matches = [m for m in
-                   [self._validate_match(spectral_peaks=spectral_peaks, cursor=cursor, match_candidate=mc) for mc in
-                    match_candidates] if
-                   m.vScore >= vThreshold]
-        print(matches)'''
         cursor.close()
         conn.close()
 

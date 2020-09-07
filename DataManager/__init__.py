@@ -1,2 +1,2 @@
 from DataManager import RawDataManager
-from DataManager.DataManager import DataManager
+from DataManager.data_manager import DataManager
