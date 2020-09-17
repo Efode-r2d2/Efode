@@ -7,7 +7,7 @@ from DataManager import DataManager
 import time
 
 # source directory for query audios
-src_dir = "../../../Test_Data/Modified_Audios/Pitch_Shifted/92/"
+src_dir = "../../../Test_Data/Modified_Audios_3/Time_Stretched/90/"
 # retrieving all query audios under specified source directory
 query_audios = dir_manager.find_wav_files(src_dir=src_dir)
 # STFT based spectrogram object
@@ -30,6 +30,6 @@ for i in query_audios:
     audio_fingerprints = fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
                                                                      spectrogram=spectrogram)
     start = time.time()
-    match = data_manager.query_audio(audio_fingerprints=audio_fingerprints)
+    match = data_manager.query_audio(audio_fingerprints=audio_fingerprints,spectral_peaks=spectral_peaks[0])
     end = time.time()
     print(i, match, end - start)

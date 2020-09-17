@@ -36,7 +36,7 @@ def create_tables(conn):
                 CREATE TABLE
                 IF NOT EXISTS Peaks(
                     audio_id INTEGER, Px INTEGER, Py INTEGER,
-                    PRIMARY KEY(audio_id, Px, py),
+                    PRIMARY KEY(audio_id, Px, Py),
                     FOREIGN KEY(audio_id) REFERENCES Audios(id));""")
 
 
@@ -222,7 +222,7 @@ def store_peaks(cursor, spectral_peaks, audio_id):
     """
     for i in spectral_peaks:
         cursor.execute("""INSERT INTO Peaks
-                     VALUES (?,?,?)""", (audio_id, i[0], i[1]))
+                     VALUES (?,?,?)""", (audio_id, int(i[0]), int(i[1])))
 
 
 def lookup_peak_range(cursor, audio_id, offset, e=3750):
@@ -235,7 +235,7 @@ def lookup_peak_range(cursor, audio_id, offset, e=3750):
                    FROM Peaks
                   WHERE Px >= ? AND Px <= ?
                     AND audio_id = ?""", data)
-    return [(p[0], p[1]) for p in cursor.fetchall()]
+    return [p for p in cursor.fetchall()]
 
 
 def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
@@ -250,7 +250,7 @@ def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
     validated = 0
     for i in reference_peaks:
         reference_peak = (i[0] - match[1], i[1])
-        reference_peak_scaled = (reference_peaks[0] / match[3], reference_peak[1] / match[2])
+        reference_peak_scaled = (reference_peak[0] / match[2], reference_peak[1] / match[3])
         lBound = bisect_left(query_peaks, (reference_peak_scaled[0] - eX, reference_peak_scaled[1]))
         rBound = bisect_right(query_peaks, (reference_peak_scaled[0] + eX, reference_peak_scaled[1]))
         for j in range(lBound, rBound):
@@ -322,14 +322,20 @@ class DataManager(object):
         conn = sqlite3.connect(self.db_path)
 
         cursor = conn.cursor()
-        reference_peaks = lookup_peak_range(cursor=cursor, audio_id=match_candidates[0][0])
-        v_score = verify_peaks(match=match_candidates[0], reference_peaks=reference_peaks, query_peaks=spectral_peaks)
+        if len(match_candidates) > 0:
+            reference_peaks = lookup_peak_range(cursor=cursor, audio_id=match_candidates[0][0],
+                                                offset=match_candidates[0][1])
 
-        if v_score > 0.5:
-            audio_title = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
-            cursor.close()
-            conn.close()
-            return audio_title, match_candidates[0][2], match_candidates[0][1]
+            v_score = verify_peaks(match=match_candidates[0], reference_peaks=reference_peaks,
+                                   query_peaks=spectral_peaks)
+            print(match_candidates[0][0], match_candidates[0][1], len(reference_peaks),v_score)
+            if v_score > 0.1:
+                audio_title = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
+                cursor.close()
+                conn.close()
+                return audio_title, match_candidates[0][2], match_candidates[0][1]
+            else:
+                return "No Match", 0
         else:
             return "No Match", 0
 
@@ -351,7 +357,7 @@ class DataManager(object):
         for i in binned_items:
             outlier_removal(binned_item=i, results=results)
         sorted_binned = sorted(binned_items, key=operator.itemgetter(2), reverse=True)
-        sorted_results = sorted(results, key=operator.itemgetter(2), reverse=True)
+        sorted_results = sorted(results, key=operator.itemgetter(4), reverse=True)
         # print(sorted_binned)
         # print("Results", sorted_results)
         cursor.close()

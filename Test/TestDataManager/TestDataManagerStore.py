@@ -20,7 +20,7 @@ fingerprint_generator = Fingerprint(frames_per_second=219, target_zone_center=4,
 # Data manager object
 data_manager = DataManager("../../../Databases/Efode_Test_1.db")
 count = 1
-for i in reference_audios:
+for i in reference_audios[0:10]:
     audio_title = i.split("/")[5].split(".")[0]
     # loading time series audio data of one of reference audio
     audio_data = audio_manager.load_audio(audio_path=i, sr=7000)
