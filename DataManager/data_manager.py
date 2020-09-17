@@ -1,9 +1,10 @@
 import math
-import sqlite3
-import numpy as np
-from bisect import bisect_left, bisect_right
-from collections import defaultdict, namedtuple
 import operator
+import sqlite3
+from bisect import bisect_left, bisect_right
+from collections import defaultdict
+
+import numpy as np
 
 
 def create_tables(conn):
@@ -206,7 +207,7 @@ def outlier_removal(binned_item, results):
     items = [v for v in binned_item[3] if
              (means[0] - 2 * stds[0] <= v[0] <= means[0] + 2 * stds[0]) and
              (means[1] - 2 * stds[1] <= v[1] <= means[1] + 2 * stds[1])]
-    results.append([binned_item[0], binned_item[1], len(items)])
+    results.append([binned_item[0], binned_item[1], means[0], means[1], len(items)])
 
 
 def store_peaks(cursor, spectral_peaks, audio_id):
@@ -235,6 +236,30 @@ def lookup_peak_range(cursor, audio_id, offset, e=3750):
                   WHERE Px >= ? AND Px <= ?
                     AND audio_id = ?""", data)
     return [(p[0], p[1]) for p in cursor.fetchall()]
+
+
+def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
+    """
+    Checks for presence of a given set of reference peaks in the
+    query fingerprint's list of peaks according to time and
+    frequency boundaries (eX and eY). Each reference peak is adjusted
+    according to estimated sFreq/sTime from candidate filtering
+    stage.
+    Returns: validation score (num. valid peaks / total peaks)
+    """
+    validated = 0
+    for i in reference_peaks:
+        reference_peak = (i[0] - match[1], i[1])
+        reference_peak_scaled = (reference_peaks[0] / match[3], reference_peak[1] / match[2])
+        lBound = bisect_left(query_peaks, (reference_peak_scaled[0] - eX, reference_peak_scaled[1]))
+        rBound = bisect_right(query_peaks, (reference_peak_scaled[0] + eX, reference_peak_scaled[1]))
+        for j in range(lBound, rBound):
+            if not reference_peak_scaled[1] - eY <= query_peaks[j][1] <= reference_peak_scaled[1] + eY:
+                continue
+            else:
+                validated += 1
+    vScore = (float(validated) / len(reference_peaks))
+    return vScore
 
 
 class DataManager(object):
@@ -282,12 +307,13 @@ class DataManager(object):
         conn.commit()
         conn.close()
 
-    def query_audio(self, audio_fingerprints):
+    def query_audio(self, audio_fingerprints, spectral_peaks):
         """
         A method to query for a matching audio given fingerprints of a query audio.
 
         Parameters:
             audio_fingerprints (List): List of fingerprints extracted from query audio.
+            spectral_peaks (List): List of spectral peaks extracted from spectrogram of the audio.
 
         Returns:
 
@@ -296,11 +322,14 @@ class DataManager(object):
         conn = sqlite3.connect(self.db_path)
 
         cursor = conn.cursor()
-        if len(match_candidates) > 0 and match_candidates[0][2] > 5:
-            audio_id = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
+        reference_peaks = lookup_peak_range(cursor=cursor, audio_id=match_candidates[0][0])
+        v_score = verify_peaks(match=match_candidates[0], reference_peaks=reference_peaks, query_peaks=spectral_peaks)
+
+        if v_score > 0.5:
+            audio_title = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
             cursor.close()
             conn.close()
-            return audio_id, match_candidates[0][2], match_candidates[0][1]
+            return audio_title, match_candidates[0][2], match_candidates[0][1]
         else:
             return "No Match", 0
 
