@@ -262,7 +262,7 @@ def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
     return vScore
 
 
-class DataManager(object):
+class FingerprintManager(object):
     """
     A class to manager storing audio fingerprints to a reference fingerprint database and query for
     a matching audio given audio fingerprints extracted from the query audio.
@@ -274,7 +274,7 @@ class DataManager(object):
 
     def __init__(self, db_path):
         """
-        A constructor for DataManager class.
+        A constructor for FingerprintManager class.
 
         Parameters:
             db_path (String): a path to reference audio fingerprints database.

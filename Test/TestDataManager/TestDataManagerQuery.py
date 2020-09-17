@@ -2,8 +2,8 @@ from Utilities import dir_manager
 from Utilities import audio_manager
 from Core import STFT
 from Core import PeakExtractor
-from Core import Fingerprint
-from DataManager import DataManager
+from Core import FingerprintGenerator
+from FingerprintManager import FingerprintManager
 import time
 
 # source directory for query audios
@@ -15,9 +15,9 @@ stft = STFT(n_fft=1024, hop_length=32, sr=700)
 # an object to extract spectral peaks from stft based spectrogram
 peak_extractor = PeakExtractor(maximum_filter_width=150, maximum_filter_height=75)
 # an object to generate quad based audio fingerprints
-fingerprint_generator = Fingerprint(target_zone_width=1, target_zone_center=2, tolerance=0.31)
-# DataManager object
-data_manager = DataManager(db_path="../../../Hashes/Efode/Efode.db")
+fingerprint_generator = FingerprintGenerator(target_zone_width=1, target_zone_center=2, tolerance=0.31)
+# FingerprintManager object
+data_manager = FingerprintManager(db_path="../../../Hashes/Efode/Efode.db")
 for i in query_audios:
     print(i)
     # loading a time series audio data from one of the query audio

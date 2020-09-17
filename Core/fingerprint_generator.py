@@ -3,7 +3,7 @@ from bisect import bisect_left
 from heapq import nlargest
 
 
-class Fingerprint(object):
+class FingerprintGenerator(object):
     """
     A class to generate audio fingerprints based on the association of three spectral peaks.
 

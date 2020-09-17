@@ -1,1 +1,1 @@
-from FingerprintManager.FingerprintManager import FingerprintManager
+from FingerprintManager.fingerprint_manager import FingerprintManager
