@@ -31,6 +31,11 @@ def create_tables(conn):
                     P1x INTEGER, P1y INTEGER,
                     P2x INTEGER, P2y INTEGER,
                     FOREIGN KEY(hash_id) REFERENCES Hashes(id),
+                    FOREIGN KEY(audio_id) REFERENCES Audios(id));
+                CREATE TABLE
+                IF NOT EXISTS Peaks(
+                    audio_id INTEGER, Px INTEGER, Py INTEGER,
+                    PRIMARY KEY(audio_id, Px, py),
                     FOREIGN KEY(audio_id) REFERENCES Audios(id));""")
 
 
@@ -195,6 +200,43 @@ def lookup_record(cursor, audio_id):
     return title[0]
 
 
+def outlier_removal(binned_item, results):
+    means = np.mean(binned_item[3], axis=0)
+    stds = np.std(binned_item[3], axis=0)
+    items = [v for v in binned_item[3] if
+             (means[0] - 2 * stds[0] <= v[0] <= means[0] + 2 * stds[0]) and
+             (means[1] - 2 * stds[1] <= v[1] <= means[1] + 2 * stds[1])]
+    results.append([binned_item[0], binned_item[1], len(items)])
+
+
+def store_peaks(cursor, spectral_peaks, audio_id):
+    """
+    Store spectral peaks extracted from reference audios.
+
+    Parameters:
+        cursor : the current cursor of the database.
+        spectral_peaks (List) : list of spectral peaks extracted from the reference audio.
+        audio_id (int): id of the audio.
+
+    """
+    for i in spectral_peaks:
+        cursor.execute("""INSERT INTO Peaks
+                     VALUES (?,?,?)""", (audio_id, i[0], i[1]))
+
+
+def lookup_peak_range(cursor, audio_id, offset, e=3750):
+    """
+    Queries Peaks table for peaks of given recordid that are within
+    3750 samples (15s) of the estimated offset value.
+    """
+    data = (offset, offset + e, audio_id)
+    cursor.execute("""SELECT Px, Py
+                   FROM Peaks
+                  WHERE Px >= ? AND Px <= ?
+                    AND audio_id = ?""", data)
+    return [(p[0], p[1]) for p in cursor.fetchall()]
+
+
 class DataManager(object):
     """
     A class to manager storing audio fingerprints to a reference fingerprint database and query for
@@ -218,23 +260,25 @@ class DataManager(object):
             create_tables(conn)
         conn.close()
 
-    def store(self, audio_fingerprints, audio_title):
+    def store(self, audio_fingerprints, spectral_peaks, audio_title):
         """
         A method to store reference audio fingerprints along with the audio title to the
         reference audio fingerprints database.
 
         Parameters:
             audio_fingerprints (List): List of reference audio fingerprints.
+            spectral_peaks (List): List of spectral peaks extracted from spectrogram of the audio.
             audio_title (String): Title of the audio.
 
         """
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             if not record_exists(cursor=cursor, audio_title=audio_title):
-                record_id = store_audio(cursor=cursor, audio_title=audio_title)
+                audio_id = store_audio(cursor=cursor, audio_title=audio_title)
+                store_peaks(spectral_peaks=spectral_peaks, audio_id=audio_id)
                 for i in audio_fingerprints:
                     store_hash(cursor=cursor, geo_hash=i[0])
-                    store_triplet(cursor=cursor, triplet=i[1], audio_id=record_id)
+                    store_triplet(cursor=cursor, triplet=i[1], audio_id=audio_id)
         conn.commit()
         conn.close()
 
@@ -256,7 +300,7 @@ class DataManager(object):
             audio_id = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
             cursor.close()
             conn.close()
-            return audio_id, match_candidates[0][2]
+            return audio_id, match_candidates[0][2], match_candidates[0][1]
         else:
             return "No Match", 0
 
@@ -269,11 +313,18 @@ class DataManager(object):
             with np.errstate(divide='ignore', invalid='ignore'):
                 filter_candidates(cursor=cursor, query_triplet=i[1], filtered=filtered)
         binned = {k: bin_times(v) for k, v in filtered.items()}
+        binned_items = list()
         results = list()
         for k, v in binned.items():
             for j, m in v.items():
-                results.append([k, j, len(m)])
+                # print(v)
+                binned_items.append([k, j, len(m), m])
+        for i in binned_items:
+            outlier_removal(binned_item=i, results=results)
+        sorted_binned = sorted(binned_items, key=operator.itemgetter(2), reverse=True)
         sorted_results = sorted(results, key=operator.itemgetter(2), reverse=True)
+        # print(sorted_binned)
+        # print("Results", sorted_results)
         cursor.close()
         conn.close()
         return sorted_results

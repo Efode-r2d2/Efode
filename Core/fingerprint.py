@@ -98,10 +98,10 @@ class Fingerprint(object):
         """
         b_l = bisect_left
         last_x = valid_triplets[-1][0][0]
-        num_partitions = last_x // self.number_of_triplets_per_second
+        num_partitions = last_x // self.frames_per_second
         # creates a tuple of same form as the Quad namedtuple for bisecting
         q = lambda x: ((x,), (), (), ())
-        partitions = [b_l(valid_triplets, q(i * self.number_of_triplets_per_second)) for i in range(num_partitions)]
+        partitions = [b_l(valid_triplets, q(i * self.frames_per_second)) for i in range(num_partitions)]
         partitions.append(len(valid_triplets))
         return partitions
 
