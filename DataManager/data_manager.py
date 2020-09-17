@@ -275,7 +275,7 @@ class DataManager(object):
             cursor = conn.cursor()
             if not record_exists(cursor=cursor, audio_title=audio_title):
                 audio_id = store_audio(cursor=cursor, audio_title=audio_title)
-                store_peaks(spectral_peaks=spectral_peaks, audio_id=audio_id)
+                store_peaks(cursor=cursor, spectral_peaks=spectral_peaks, audio_id=audio_id)
                 for i in audio_fingerprints:
                     store_hash(cursor=cursor, geo_hash=i[0])
                     store_triplet(cursor=cursor, triplet=i[1], audio_id=audio_id)
