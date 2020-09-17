@@ -7,7 +7,7 @@ from DataManager import DataManager
 import time
 
 # source directory for query audios
-src_dir = "../../../Test_Data/Modified_Audios_3/Time_Stretched/90/"
+src_dir = "../../../Test_Data/Modified_Audios/Pitch_Shifted/100/"
 # retrieving all query audios under specified source directory
 query_audios = dir_manager.find_wav_files(src_dir=src_dir)
 # STFT based spectrogram object
@@ -19,7 +19,7 @@ fingerprint_generator = Fingerprint(
     frames_per_second=219,
     target_zone_width=2,
     target_zone_center=4,
-    number_of_triplets_per_second=50,
+    number_of_triplets_per_second=36,
     tolerance=0.17)
 # fingerprint manager object
 data_manager = DataManager(db_path="../../../Databases/Efode_Test_1.db")
