@@ -28,8 +28,6 @@ with open(result_path, 'a') as csvFile:
 csvFile.close()
 count = 0
 for i in x_axis:
-    # row1 = [x_axis[count], recall_20[count], recall_30[count], recall_40[count]]
-    # row1 = [x_axis[count], recall_40[count], prec_40[count]]
     row1 = [x_axis[count], accuracy[count], precision[count]]
     with open(result_path, 'a') as csvFile:
         writer = csv.writer(csvFile)
