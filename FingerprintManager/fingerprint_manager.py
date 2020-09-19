@@ -258,7 +258,10 @@ def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
                 continue
             else:
                 validated += 1
-    vScore = (float(validated) / len(reference_peaks))
+    if len(reference_peaks) == 0:
+        vScore = 0.0
+    else:
+        vScore = (float(validated) / len(reference_peaks))
     return vScore
 
 

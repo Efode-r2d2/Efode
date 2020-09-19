@@ -8,7 +8,7 @@ import time
 import csv
 
 # source directory for query audios
-src_dir = "../../../Test_Data/Query_Audios/Time_Stretched/"
+src_dir = "../../../Test_Data/Query_Audios/Pitch_Shifted/"
 # retrieving all query audios under specified source directory
 
 # STFT based spectrogram object
@@ -24,7 +24,7 @@ fingerprint_generator = FingerprintGenerator(
     tolerance=0.31)
 # fingerprint manager object
 data_manager = FingerprintManager(db_path="../../../Databases/Efode_Test_1.db")
-result_path = "../../../New_Results/Efode/Time_Stretching/"
+result_path = "../../../New_Results/Efode/Pitch_Shifting/"
 for j in range(70, 135, 5):
     query_audios = dir_manager.find_wav_files(src_dir=src_dir + str(j))
     count = 1
