@@ -186,7 +186,7 @@ def filter_candidates(cursor, query_triplet, filtered, tolerance=0.31, e_fine=1.
         #   |queAy-canAy*sFreq| <= eFine
         if not abs(query_triplet[1] - (reference_triplet[1] * sFreq)) <= e_fine:
             continue
-        offset = reference_triplet[0] - (query_triplet[0] /sTime)
+        offset = reference_triplet[0] - (query_triplet[0] / sTime)
         filtered[reference_triplet[4]].append((offset, (sTime, sFreq)))
 
 
@@ -250,9 +250,9 @@ def verify_peaks(match, reference_peaks, query_peaks, eX=18, eY=12):
     validated = 0
     for i in reference_peaks:
         reference_peak = (i[0] - match[1], i[1])
-        reference_peak_scaled = (reference_peak[0] * match[2], reference_peak[1] *match[3])
-        lBound = bisect_left(query_peaks, (reference_peak_scaled[0] - eX, None))
-        rBound = bisect_right(query_peaks, (reference_peak_scaled[0] + eX, None))
+        reference_peak_scaled = (reference_peak[0] * match[2], reference_peak[1] * match[3])
+        lBound = bisect_left(query_peaks, (reference_peak_scaled[0] - eX, reference_peak_scaled[1]))
+        rBound = bisect_right(query_peaks, (reference_peak_scaled[0] + eX, reference_peak_scaled[1]))
         for j in range(lBound, rBound):
             if not reference_peak_scaled[1] - eY <= query_peaks[j][1] <= reference_peak_scaled[1] + eY:
                 continue
@@ -328,16 +328,15 @@ class FingerprintManager(object):
 
             v_score = verify_peaks(match=match_candidates[0], reference_peaks=reference_peaks,
                                    query_peaks=spectral_peaks)
-            print(match_candidates[0][0], match_candidates[0][1], len(reference_peaks),v_score)
-            if v_score > 0.1:
+            if v_score > 0.2:
                 audio_title = lookup_record(cursor=cursor, audio_id=match_candidates[0][0])
                 cursor.close()
                 conn.close()
-                return audio_title, match_candidates[0][2], match_candidates[0][1]
+                return audio_title, match_candidates[0][1], match_candidates[0][2], match_candidates[0][3], v_score
             else:
-                return "No Match", 0
+                return "No Match", 0, 0, 0, 0
         else:
-            return "No Match", 0
+            return "No Match", 0, 0, 0, 0
 
     def find_matches(self, audio_fingerprints):
         conn = sqlite3.connect(self.db_path)
