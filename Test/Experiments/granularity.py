@@ -8,7 +8,7 @@ import time
 import csv
 
 # source directory for query audios
-src_dir = "../../../Test_Data/Query_Audios_2/Speed_Change/"
+src_dir = "../../../Test_Data/Modified_Audios_11/"
 # retrieving all query audios under specified source directory
 
 # STFT based spectrogram object
@@ -24,13 +24,13 @@ fingerprint_generator = FingerprintGenerator(
     tolerance=0.31)
 # fingerprint manager object
 data_manager = FingerprintManager(db_path="../../../Databases/Efode_Test_1.db")
-result_path = "../../../New_Results/Efode/Speed_Change/"
-for j in range(70, 135, 5):
-    query_audios = dir_manager.find_wav_files(src_dir=src_dir + str(j))
-    count = 151
+result_path = "../../../New_Results/Efode/Granularity/"
+query_audios = dir_manager.find_wav_files(src_dir=src_dir)
+count = 3701
+for j in range(5, 35, 5):
     for i in query_audios:
         audio_title = i.split("/")[7].split(".")[0]
-        audio_data = audio_manager.load_audio(audio_path=i, sr=7000, offset=0.0, duration=30.0)
+        audio_data = audio_manager.load_audio(audio_path=i, sr=7000, offset=0.0, duration=j)
         spectrogram = stft.compute_spectrogram_magnitude_in_db(audio_data=audio_data)
         spectral_peaks = peak_extractor.extract_spectral_peaks(spectrogram=spectrogram)
         audio_fingerprints = fingerprint_generator.generate_fingerprints(spectral_peaks=spectral_peaks[0],
@@ -38,8 +38,10 @@ for j in range(70, 135, 5):
         start = time.time()
         match = data_manager.query_audio(audio_fingerprints=audio_fingerprints, spectral_peaks=spectral_peaks[0])
         end = time.time()
-        print("Requested ", "Match Found ", "Detected at ", "Temp Mod ", "Pitch Mod ", "Response Time ", "V_Score")
-        print(audio_title, match[0], round((match[1] / 219), 3), round(match[2], 3), round(match[3], 3), end - start,
+        print(count, " Requested ", "Match Found ", "Detected at ", "Temp Mod ", "Pitch Mod ", "Response Time ",
+              "V_Score")
+        print(count, " ", audio_title, match[0], round((match[1] / 219), 3), round(match[2], 3), round(match[3], 3),
+              end - start,
               round(match[4], 3))
         result = None
         if match[0] == "No Match":
@@ -52,7 +54,7 @@ for j in range(70, 135, 5):
         row = [count, audio_title, match[0], result, round((match[1] / 219), 3), round(match[2], 3), round(match[3], 3),
                end - start,
                round(match[4], 3)]
-        with open(result_path + str(j) + ".csv", 'a') as csvFile:
+        with open(result_path+str(j)+"_sec.csv", 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
         csvFile.close()
